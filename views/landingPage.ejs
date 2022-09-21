@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <header>
+      <%- include('./partials/_header',{isAuth: isAuth, rights: rights}) %>
+    </header>
+
+    <main>
+      <div class="main-header">
+        <h1>Available Topics</h1>
+
+        <% if(rights=='admin') { %>
+        <a class="new-project-btn" href="/new-project">
+          <span><i class="fa fa-plus"></i></span>
+          New Topic
+        </a>
+        <% } %>
+      </div>
+
+      <% if(data.length <= 0) { %>
+
+      <div class="add-program-div">
+        <i class="fa fa-plus"></i>
+        <p>Add a Topic from top right corner</p>
+      </div>
+
+      <% } else { %>
+
+      <div class="div-cards">
+        <% for(var i=0; i < data.length; i++) { %>
+        <a href="/projects/<%= data[i].id %>">
+          <div class="card">
+            <h3><%= data[i].title %></h3>
+            <p><%= data[i].description %></p>
+            <% if(rights=='admin') { %>
+            <form
+              action="/admin/delete-project/<%= data[i].id %>"
+              method="post"
+            >
+              <button name="delete">Delete Topic</button>
+            </form>
+            <% } %>
+          </div>
+        </a>
+        <% } %>
+      </div>
+
+      <% } %>
+    </main>
+  </body>
+</html>

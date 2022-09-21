@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Student</title>
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <%- include("./partials/_header", {isAuth: isAuth, rights: rights}) %>
+
+    <main class="new-project-main">
+      <h1>Create a New User</h1>
+
+      <form action="/admin/new-user" method="post">
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name" />
+        <label for="email">Email: </label>
+        <input type="email" name="email" id="email" />
+        <label for="password">Password: </label>
+        <input type="password" name="password" id="password" />
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <label for="rights">Privileges</label>
+        <select name="rights" id="rights">
+          <option value="teamlead">Team Lead</option>
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit">Save</button>
+      </form>
+    </main>
+  </body>
+</html>

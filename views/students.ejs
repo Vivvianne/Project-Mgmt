@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Students</title>
+    <link rel="stylesheet" href="./main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <header>
+      <%- include('./partials/_header', {isAuth: isAuth, rights: rights}) %>
+    </header>
+
+    <main>
+      <div class="main-header">
+        <h1>Enrolled students</h1>
+
+        <% if(rights=='admin') { %>
+        <a class="new-student-link" href="/new-user">
+          <span><i class="fa fa-plus"></i></span>
+          New Student
+        </a>
+        <% } %>
+      </div>
+
+      <% if(students.length <= 0) { %> <% if(rights=='admin') { %>
+      <div class="add-program-div">
+        <i class="fa fa-plus"></i>
+        <p>Add a Student from top right corner</p>
+      </div>
+      <% } else { %>
+      <div class="nothing-div">
+        <p>No Students available yet</p>
+      </div>
+      <%} } else { %>
+
+      <div class="students-div">
+        <% for(var i=0; i < students.length; i++) { %>
+        <div class="student">
+          <h3><%= students[i].name %></h3>
+          |
+          <p><%= students[i].email %></p>
+          |
+          <p>
+            <span class="circle-icon">
+              <% if(students[i].status == 'active') { %>
+              <i class="fa fa-stack" style="background-color: green"></i>
+              <% } else if(students[i].status == 'inactive') { %>
+              <i class="fa fa-stack" style="background-color: grey"></i>
+              <% } %>
+            </span>
+
+            <%= students[i].status %>
+          </p>
+        </div>
+        <% } %>
+      </div>
+      <% } %>
+    </main>
+  </body>
+</html>

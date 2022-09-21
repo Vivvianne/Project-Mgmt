@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <header>
+      <%- include('./partials/_header', {isAuth: isAuth, rights: rights}) %>
+    </header>
+
+    <main>
+      <div class="main-header">
+        <h1><%= title %></h1>
+
+        <% if(rights=='admin') { %>
+        <a class="new-program-btn" href="/<%= title %>/new-program">
+          <span><i class="fa fa-plus"></i></span>
+          New Project
+        </a>
+        <% } else if (rights=='student') {%>
+        <form action="/students/enroll/<%= title %>" method="post">
+          <button type="submit">Enroll</button>
+        </form>
+        <!-- <a class="new-program-btn" href="/students/enroll/<%= title %>"> Enroll </a> -->
+        <% } %>
+      </div>
+
+      <div class="div-programs">
+        <% if(data.length <= 0) { if(rights=='admin') { %>
+        <div class="add-program-div">
+          <i class="fa fa-plus"></i>
+          <p>Add tasks from top right corner</p>
+        </div>
+
+        <% } else { %>
+        <div class="nothing-div">
+          <p>no Tasks yet</p>
+        </div>
+        <%} } else { %>
+        <ul>
+          <% for(var i=0; i < data.length; i++) { %>
+          <li>+ <%= data[i].title %></li>
+          <% } %>
+        </ul>
+        <% } %>
+      </div>
+    </main>
+  </body>
+</html>

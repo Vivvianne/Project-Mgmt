@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <header>
+      <%- include("./partials/_header.ejs", {isAuth: isAuth, rights: rights}) %>
+    </header>
+
+    <main>
+      <h1>Hello <%= user.name %></h1>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores, iste?
+      </p>
+
+      <h2>Enrolled Courses</h2>
+      <ul>
+        <% for(var i=0;i < courses.length; i++) { %>
+        <li><%= courses[i].title %></li>
+        <% } %>
+      </ul>
+    </main>
+  </body>
+</html>
