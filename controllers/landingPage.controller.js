@@ -1,13 +1,22 @@
 const db = require("../config").firestore();
 
 exports.getLandingPage = async (req, res, next) => {
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
   try {
     const snapshot = await db.collection("projects").get();
     if (snapshot.empty) {
       return res.render("landingPage.ejs", {
         data: [],
         rights: req.session.rights,
-        isAuth: req.session.isAuth,
+        isAuth: isAuth,
       });
     }
 
@@ -20,7 +29,7 @@ exports.getLandingPage = async (req, res, next) => {
     });
     return res.render("landingPage.ejs", {
       rights: req.session.rights,
-      isAuth: req.session.isAuth,
+      isAuth: isAuth,
       data: data,
     });
   } catch (e) {
@@ -29,7 +38,15 @@ exports.getLandingPage = async (req, res, next) => {
 };
 
 exports.getProjectDetailsPage = async (req, res, next) => {
+  let isAuth;
   const projectId = req.params.id;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
 
   try {
     const snapshot = await db
@@ -41,21 +58,26 @@ exports.getProjectDetailsPage = async (req, res, next) => {
       return res.render("project_details.ejs", {
         title: projectId,
         data: [],
-        rights: req.session.rights[0],
-        isAuth: req.session.isAuth,
+        rights: req.session.rights,
+        isAuth: isAuth,
       });
     }
 
     let data = snapshot.docs.map((program) => {
+      // console.log(program.data());
       return {
-        title: program.data().program,
+        name: program.data().program.name,
+        desc: program.data().program.description,
+        author: program.data().program.author,
       };
     });
 
+    console.log(data);
+
     return res.render("project_details.ejs", {
       title: projectId,
-      rights: req.session.rights[0],
-      isAuth: req.session.isAuth,
+      rights: req.session.rights,
+      isAuth: isAuth,
       data: data,
     });
   } catch (e) {
@@ -64,23 +86,50 @@ exports.getProjectDetailsPage = async (req, res, next) => {
 };
 
 exports.getNewProjectPage = async (req, res, next) => {
-  res.render("new-project.ejs", {
-    isAuth: req.session.isAuth,
-    rights: req.session.rights[0],
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
+  res.render("new-topic.ejs", {
+    isAuth: isAuth,
+    rights: req.session.rights,
   });
 };
 
 exports.getNewProgramPage = async (req, res, next) => {
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
   const title = req.params.projectId;
 
   res.render("new-program.ejs", {
     title: title,
-    isAuth: req.session.isAuth,
-    rights: req.session.rights[0],
+    isAuth: isAuth,
+    rights: req.session.rights,
   });
 };
 
 exports.getStudentsPage = async (req, res, next) => {
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
   try {
     const snapshot = await db
       .collection("users")
@@ -90,8 +139,8 @@ exports.getStudentsPage = async (req, res, next) => {
     if (snapshot.empty) {
       return res.render("students.ejs", {
         students: [],
-        isAuth: req.session.isAuth,
-        rights: req.session.rights[0],
+        isAuth: isAuth,
+        rights: req.session.rights,
       });
     }
 
@@ -106,8 +155,8 @@ exports.getStudentsPage = async (req, res, next) => {
 
     return res.render("students.ejs", {
       students: data,
-      isAuth: req.session.isAuth,
-      rights: req.session.rights[0],
+      isAuth: isAuth,
+      rights: req.session.rights,
     });
   } catch (e) {
     console.log(e.message);
@@ -115,13 +164,31 @@ exports.getStudentsPage = async (req, res, next) => {
 };
 
 exports.getNewUserPage = (req, res, next) => {
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
   res.render("new-user.ejs", {
-    isAuth: req.session.isAuth,
-    rights: req.session.rights[0],
+    isAuth: isAuth,
+    rights: req.session.rights,
   });
 };
 
 exports.getTeamleadsPage = async (req, res, next) => {
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
   try {
     const snapshot = await db
       .collection("users")
@@ -131,8 +198,8 @@ exports.getTeamleadsPage = async (req, res, next) => {
     if (snapshot.empty) {
       return res.render("teamleads.ejs", {
         data: [],
-        isAuth: req.session.isAuth,
-        rights: req.session.rights[0],
+        isAuth: isAuth,
+        rights: req.session.rights,
       });
     }
 
@@ -147,8 +214,8 @@ exports.getTeamleadsPage = async (req, res, next) => {
 
     return res.render("teamleads.ejs", {
       data: data,
-      isAuth: req.session.isAuth,
-      rights: req.session.rights[0],
+      isAuth: isAuth,
+      rights: req.session.rights,
     });
   } catch (e) {
     console.log(e.message);
@@ -156,6 +223,15 @@ exports.getTeamleadsPage = async (req, res, next) => {
 };
 
 exports.getProfilePage = async (req, res, next) => {
+  let isAuth;
+
+  if (req.user) {
+    isAuth = true;
+    req.session.rights = "admin";
+  } else if (req.session.isAuth) {
+    isAuth = req.session.isAuth;
+  }
+
   const snapshot = await db
     .collection("users")
     .doc(req.session.uid)
@@ -163,19 +239,31 @@ exports.getProfilePage = async (req, res, next) => {
     .get();
 
   if (snapshot.empty) {
-    res.json({ msg: "no courses enrolled yet" });
+    res.render("profile.ejs", {
+      user: req.session.user,
+      rights: req.session.rights,
+      isAuth: isAuth,
+      courses: {},
+    });
   }
 
   let data = snapshot.docs.map((course) => {
     return {
       title: course.data().title,
+      rights: req.session.rights,
+      isAuth: req.session.isAuth,
     };
   });
-  
+
   return res.render("profile.ejs", {
     user: req.session.user,
-    rights: req.session.rights[0],
-    isAuth: req.session.isAuth,
-    courses: data
+    rights: req.session.rights,
+    isAuth: isAuth,
+    courses: data,
   });
+};
+
+exports.logout = (req, res, next) => {
+  req.session.destroy();
+  res.redirect("/auth/login");
 };

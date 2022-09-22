@@ -1,13 +1,13 @@
 exports.isAuthenticated = (req, res, next) => {
-  if (req.session.isAuth) {
+  if (req.user || req.session.isAuth) {
     return next();
   } else {
-    return res.redirect("/auth/login");
+    res.redirect("/auth/login");
   }
 };
 
 exports.isAdmin = (req, res, next) => {
-  if (req.session.rights[0] === "admin") {
+  if (req.session.rights === "admin") {
     return next();
   } else {
     console.log("Unauthorized!");

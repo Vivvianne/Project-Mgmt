@@ -82,8 +82,6 @@ input:focus {
   outline: none;
 }
 
-
-
 button {
   background-color: black;
   color: white;
@@ -160,6 +158,10 @@ main .main-header {
   font-size: 18px;
 }
 
+.div-programs .project-more-info {
+  background-color: white;
+}
+
 .new-project-main {
   width: 50%;
   margin: 3rem auto;
@@ -212,15 +214,34 @@ select:focus {
   outline: none;
 }
 
-.google-btn {
- background-color: red;
- padding: 10px; 
- color: white;
- font-family: "Open Sans", sans-serif;
- position: relative;
- left: 15%;
+.social-login-div {
+  margin-top: 1rem;
 }
 
-.google-btn i {
+.google-btn {
+  background-color: red;
+}
+
+.facebook-btn {
+  background-color: blue;
+}
+
+.google-btn,
+.facebook-btn {
+  padding: 10px;
+  color: white;
+  margin: 0 2rem 0 0;
+  text-decoration: none;
+  font-family: "Open Sans", sans-serif;
+}
+
+.google-btn i,
+.facebook-btn i {
   margin-right: 10px;
+}
+
+hr {
+  width: 80%;
+  margin-left: 0;
+  margin-bottom: 1rem;
 }

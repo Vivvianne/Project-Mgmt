@@ -49,8 +49,8 @@ exports.createUser = async (req, res, next) => {
   }
 };
 
-// create project
-exports.createProject = async (req, res, next) => {
+// create topic
+exports.createTopic = async (req, res, next) => {
   const { title, desc } = req.body;
 
   try {
@@ -63,23 +63,30 @@ exports.createProject = async (req, res, next) => {
     return res.redirect("/");
   } catch (e) {
     console.log(e.message);
-    return res.status(401).json({ msg: "error creating project" });
+    res.status(401).send("failed to");
   }
 };
 
-// create programs
+// create project
 exports.createProgram = async (req, res, next) => {
   const projectTitle = req.params.projectTitle;
 
-  const program = req.body.program;
+  const name = req.body.name;
+  const description = req.body.desc;
+
+  const program = {
+    name: name,
+    description: description,
+    author: "",
+  };
 
   try {
     await db
       .collection("projects")
       .doc(projectTitle.toLowerCase())
       .collection("programs")
-      .add({ program: program });
-      
+      .add({ program });
+
     return res.redirect(`/projects/${projectTitle}`);
   } catch (e) {
     console.log(e.message);

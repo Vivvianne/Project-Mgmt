@@ -4,21 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-signin-scope" content="profile email" />
-    <meta
-      name="google-signin-client_id"
-      content="206348801480-kco8dl0t80hmuo02f91tjf820ta0tr7c.apps.googleusercontent.com"
-    />
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <title>Login</title>
     <link rel="stylesheet" href="../main.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+    
   </head>
   <body>
     <header><%- include("./partials/_header", {isAuth:isAuth}) %></header>
@@ -40,45 +28,7 @@
         </p>
       </form>
 
-      <a href="/auth/google" class="google-btn">
-        <i class="fab fa-google left"></i>Login With Google
-      </a>
-
-      <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-      <a href="#" onclick="signOut();">SIgn Out</a> -->
+     
     </main>
-
-    <script>
-      function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log("signed out");
-        });
-      }
-
-      function onSignIn(googleUser) {
-        console.log("logging in with google");
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log("Full Name: " + profile.getName());
-        console.log("Given Name: " + profile.getGivenName());
-        console.log("Family Name: " + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/auth/google-login");
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = () => {
-          console.log("Signed in as: " + xhr.responseText);
-          xhr.send(JSON.stringify({ token: id_token }));
-        };
-      }
-    </script>
   </body>
 </html>

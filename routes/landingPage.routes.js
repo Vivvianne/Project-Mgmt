@@ -12,7 +12,7 @@ router.get(
 );
 
 router.get(
-  "/new-project",
+  "/new-topic",
   isAuthenticated,
   landingPageController.getNewProjectPage
 );
@@ -33,6 +33,8 @@ router.get(
   landingPageController.getNewProgramPage
 );
 
-router.get('/profile', isAuthenticated, landingPageController.getProfilePage)
+router.get("/profile", isAuthenticated, landingPageController.getProfilePage);
+
+router.get("/logout", landingPageController.logout);
 
 module.exports = router;

@@ -1,15 +1,23 @@
 {
-  "name": "prject-mgmt",
+  "name": "silver_octo_project_manager",
   "version": "1.0.0",
-  "description": "",
+  "description": "project manager with Node and Firebase",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "start:dev": "nodemon server.js"
   },
-  "author": "Vivvianne",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RodgersX/silver-octo-project-manager.git"
+  },
+  "author": "Mawira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RodgersX/silver-octo-project-manager/issues"
+  },
+  "homepage": "https://github.com/RodgersX/silver-octo-project-manager#readme",
   "devDependencies": {
     "nodemon": "^2.0.20"
   },
@@ -26,6 +34,7 @@
     "firebase-admin": "^11.0.1",
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
+    "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
     "pkg": "^5.8.0"

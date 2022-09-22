@@ -5,10 +5,10 @@ const { isAuthenticated, isAdmin } = require("../middleware/auth_guard");
 router.post("/new-user", isAuthenticated, isAdmin, adminController.createUser);
 
 router.post(
-  "/new-project",
+  "/new-topic",
   isAuthenticated,
   isAdmin,
-  adminController.createProject
+  adminController.createTopic
 );
 
 router.post(

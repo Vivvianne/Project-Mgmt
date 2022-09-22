@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const passport = require("passport");
 
 const {
   getAuth,
@@ -57,7 +56,6 @@ const login = async (req, res, next) => {
   try {
     if (email !== undefined || password !== undefined) {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log(auth.currentUser.uid);
       const snapshot = await db
         .collection("users")
         .where("email", "==", email)
@@ -65,12 +63,12 @@ const login = async (req, res, next) => {
 
       req.session.uid = auth.currentUser.uid;
 
-      let rights = snapshot.docs.map((item) => {
-        req.session.user = item.data();
-        return item.data().rights;
+      let data = snapshot.docs.map((item) => {
+        return item.data();
       });
 
-      req.session.rights = rights;
+      req.session.user = data;
+      req.session.rights = data[0].rights;
       req.session.isAuth = true;
 
       // log the session to console
@@ -82,27 +80,9 @@ const login = async (req, res, next) => {
   }
 };
 
-const googleSignIn = (req, res, next) => {
-  res.redirect("/");
-};
-
-const googleCallback = async (req, res, next) => {
-  res.redirect("/auth/login");
-};
-
-const logout = (req, res, next) => {
-  auth.signOut();
-  req.session.rights = "";
-  req.session.isAuth = false;
-  return res.redirect("/");
-};
-
 module.exports = {
   signup,
   login,
   getSignupPage,
   getLoginPage,
-  logout,
-  googleSignIn,
-  googleCallback,
 };
