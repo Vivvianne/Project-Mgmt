@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,6 +8,7 @@ const db = require("../config").firestore();
 const app = require("../db");
 
 const auth = getAuth(app);
+
 // create user
 exports.createUser = async (req, res, next) => {
   const { name, email, password, status, rights } = req.body;
@@ -24,15 +24,13 @@ exports.createUser = async (req, res, next) => {
       await createUserWithEmailAndPassword(auth, email, password);
       let user = auth.currentUser;
       await updateProfile(user, { displayName: name });
-
-      const hashedPassword = await bcrypt.hash(password, 12);
+      console.log(user);
 
       let newUser = {
         name: name,
         email: email,
         status: status,
         rights: rights,
-        password: hashedPassword,
       };
 
       await db.collection("users").doc(user.uid).set(newUser);
@@ -54,11 +52,10 @@ exports.createTopic = async (req, res, next) => {
   const { title, desc } = req.body;
 
   try {
-    const resp = await db
+    await db
       .collection("projects")
       .doc(title.toLowerCase())
       .set({ title: title, description: desc });
-    console.log(resp);
 
     return res.redirect("/");
   } catch (e) {
@@ -71,13 +68,14 @@ exports.createTopic = async (req, res, next) => {
 exports.createProgram = async (req, res, next) => {
   const projectTitle = req.params.projectTitle;
 
-  const name = req.body.name;
-  const description = req.body.desc;
+  const { name, desc, video } = req.body;
+
+  let author = req.session.user.name;
 
   const program = {
     name: name,
-    description: description,
-    author: "",
+    description: desc,
+    author: author,
   };
 
   try {
@@ -123,13 +121,15 @@ exports.deleteProject = async (req, res, next) => {
 // view all students + team leads
 // students
 exports.getAllStudents = async (req, res, next) => {
+  let data;
+
   try {
     const snapshot = await db.collection("students").get();
     if (snapshot.empty) {
-      return;
+      data = [];
     }
 
-    let data = snapshot.docs.map((student) => {
+    data = snapshot.docs.map((student) => {
       return {
         name: student.data().name,
         email: student.data().email,
@@ -145,45 +145,55 @@ exports.getAllStudents = async (req, res, next) => {
 
 // projects
 exports.getAllProjects = async (req, res, next) => {
-  const snapshot = await db.collection("projects").get();
-  if (snapshot.empty) {
-    return;
+  let data;
+
+  try {
+    const snapshot = await db.collection("projects").get();
+    if (snapshot.empty) {
+      data = [];
+    }
+
+    data = snapshot.docs.map((project) => {
+      return {
+        title: project.data().title,
+        description: project.data().description,
+        id: project.id,
+      };
+    });
+
+    return res.status(200).json({ data: data });
+  } catch (e) {
+    console.log(e.messaage);
   }
-
-  let data = snapshot.docs.map((project) => {
-    return {
-      title: project.data().title,
-      description: project.data().description,
-      id: project.id,
-    };
-  });
-
-  return res.status(200).json({ data: data });
 };
 
 // programs
 exports.getProjectPrograms = async (req, res, next) => {
   const projectTitle = req.params.projectTitle;
 
-  const snapshot = await db
-    .collection("projects")
-    .doc(projectTitle.toLowerCase())
-    .collection("programs")
-    .get();
+  let data;
 
-  if (snapshot.empty) {
-    return res.status(401).json({
-      msg: "no programs for this project",
+  try {
+    const snapshot = await db
+      .collection("projects")
+      .doc(projectTitle.toLowerCase())
+      .collection("programs")
+      .get();
+
+    if (snapshot.empty) {
+      data = [];
+    }
+
+    data = snapshot.docs.map((project) => {
+      return {
+        title: project.data().program,
+      };
     });
+
+    return res.status(200).json({ data: data });
+  } catch (e) {
+    console.log(e.message);
   }
-
-  let data = snapshot.docs.map((project) => {
-    return {
-      title: project.data().program,
-    };
-  });
-
-  return res.status(200).json({ data: data });
 };
 
 // make student active/inactive
@@ -193,11 +203,33 @@ exports.changeStudentStatus = async (req, res, next) => {
 
   try {
     await db.collection("students").doc(id).update({ status: status });
-    return res.status(201).json({ msg: "successfully updated" });
+    return res.status(201).json({ msg: "success" });
   } catch (e) {
     console.log(e.message);
     return res.status(500).json({ msg: e.message });
   }
 };
 
-// comment on students
+// assign tasks to students and team leads
+exports.assignTasks = async (req, res) => {
+  const { taskName, userId } = req.body;
+
+  task = {
+    name: taskName,
+  };
+
+  try {
+    await db
+      .collection("users")
+      .doc(userId)
+      .collection("tasks")
+      .doc()
+      .set(task);
+
+    console.log(`Task assigned to user ${userId}`);
+    
+    res.redirect("/");
+  } catch (err) {
+    console.log(err.message);
+  }
+};

@@ -10,7 +10,7 @@ const enrollToCourse = async (req, res, next) => {
   try {
     await db
       .collection("users")
-      .doc(req.session.uid)
+      .doc(req.session.user.userId)
       .collection("courses")
       .doc(projectId)
       .set(newCourse);
@@ -20,23 +20,5 @@ const enrollToCourse = async (req, res, next) => {
     console.log(err.message);
   }
 };
-
-// const enrolledCourses = async (req, res, next) => {
-//   const snapshot = await db
-//     .collection("users")
-//     .doc(req.session.uid)
-//     .collection("courses")
-//     .get();
-//   if (snapshot.empty) {
-//     res.json({ msg: "no courses enrolled yet" });
-//   }
-
-//   let data = snapshot.docs.map((course) => {
-//     return {
-//       title: course.data().title,
-//     };
-//   });
-//   res.status(200).json({ data: data });
-// };
 
 module.exports = { enrollToCourse };

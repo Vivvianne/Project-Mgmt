@@ -14,7 +14,6 @@ router.post(
 router.post(
   "/:projectTitle/new-program",
   isAuthenticated,
-  isAdmin,
   adminController.createProgram
 );
 
@@ -56,8 +55,9 @@ router.get(
 router.get(
   "/:projectTitle/programs",
   isAuthenticated,
-  isAdmin,
   adminController.getProjectPrograms
 );
+
+router.post("/assign-task", isAuthenticated, adminController.assignTasks);
 
 module.exports = router;

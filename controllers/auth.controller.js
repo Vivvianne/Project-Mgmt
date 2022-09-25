@@ -1,5 +1,3 @@
-const bcrypt = require("bcrypt");
-
 const {
   getAuth,
   createUserWithEmailAndPassword,
@@ -14,11 +12,11 @@ const db = admin.firestore();
 const auth = getAuth(app);
 
 const getSignupPage = (req, res, next) => {
-  res.render("signup.ejs", { isAuth: req.session.isAuth });
+  res.render("signup.ejs", { isAuth: req.session.user ? true : false });
 };
 
 const getLoginPage = (req, res, next) => {
-  res.render("login.ejs", { isAuth: req.session.isAuth });
+  res.render("login.ejs", { isAuth: req.session.user ? true : false });
 };
 
 const signup = async (req, res, next) => {
@@ -30,14 +28,11 @@ const signup = async (req, res, next) => {
       let user = auth.currentUser;
       await updateProfile(user, { displayName: name });
 
-      const hashedPassword = await bcrypt.hash(password, 12);
-
       let newUser = {
         name: name,
         email: email,
         status: "active",
         rights: "admin",
-        password: hashedPassword,
       };
 
       await db.collection("users").add(newUser);
@@ -56,23 +51,25 @@ const login = async (req, res, next) => {
   try {
     if (email !== undefined || password !== undefined) {
       await signInWithEmailAndPassword(auth, email, password);
+
       const snapshot = await db
         .collection("users")
         .where("email", "==", email)
         .get();
 
-      req.session.uid = auth.currentUser.uid;
-
-      let data = snapshot.docs.map((item) => {
+      let userData = snapshot.docs.map((item) => {
         return item.data();
       });
 
-      req.session.user = data;
-      req.session.rights = data[0].rights;
-      req.session.isAuth = true;
+      let user = {
+        userId: auth.currentUser.uid,
+        email: auth.currentUser.email,
+        name: auth.currentUser.displayName,
+        rights: userData[0].rights,
+      };
 
-      // log the session to console
-      console.log(req.session);
+      req.session.user = user;
+
       return res.redirect(`/`);
     }
   } catch (e) {
@@ -80,9 +77,21 @@ const login = async (req, res, next) => {
   }
 };
 
+const OauthCallback = async (req, res) => {
+  try {
+    await db.collection("users").doc(req.user.userId).set(req.user);
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  req.session.user = req.user;
+  res.redirect("/");
+};
+
 module.exports = {
   signup,
   login,
   getSignupPage,
   getLoginPage,
+  OauthCallback,
 };

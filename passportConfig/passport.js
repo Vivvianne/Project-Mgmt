@@ -14,22 +14,18 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:8080/auth/google/callback",
-      // passReqToCallback: true,
     },
     async (accessToken, refreshToken, profile, done) => {
       const newUser = {
-        rights: "admin",
-        status: "active",
+        userId: profile.id,
         name: profile.displayName,
         email: profile.emails[0].value,
+        provider: profile.provider,
+        rights: "admin",
+        status: "active",
       };
 
-      try {
-        await db.collection("users").doc(profile.id).set(newUser);
-      } catch (e) {
-        console.log(e.message);
-      }
-      return done(null, profile);
+      return done(null, newUser);
     }
   )
 );
@@ -42,53 +38,39 @@ passport.use(
       callbackURL: "http://localhost:8080/auth/facebook/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
-      // console.log(profile);
-
       const newUser = {
+        name: profile.displayName,
+        userId: profile.id,
+        provider: profile.provider,
         rights: "admin",
         status: "active",
-        name: profile.displayName,
       };
 
-      // req.user = profile;
-
-      try {
-        await db.collection("users").doc(profile.id).set(newUser);
-      } catch (e) {
-        console.log(e.message);
-      }
-
-      done(null, profile);
+      done(null, newUser);
     }
   )
 );
 
-// passport.use(
-//   new TwitterStrategy(
-//     {
-//       consumerKey: process.env.TWITTER_CONSUMER_KEY,
-//       consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-//       callbackURL: "http://localhost:8080/auth/twitter/callback",
-//     },
-//     async (token, tokenSecret, profile, cb) => {
-//       console.log(profile);
+passport.use(
+  new TwitterStrategy(
+    {
+      consumerKey: process.env.TWITTER_CONSUMER_KEY,
+      consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+      callbackURL: "http://localhost:8080/auth/twitter/callback",
+    },
+    async (token, tokenSecret, profile, cb) => {
+      const newUser = {
+        name: profile.displayName,
+        provider: profile.provider,
+        userId: profile.id,
+        rights: "admin",
+        status: "active",
+      };
 
-//       const newUser = {
-//         rights: "admin",
-//         status: "active",
-//         name: profile.displayName,
-//       };
-
-//       try {
-//         await db.collection("users").doc(profile.id).set(newUser);
-//       } catch (e) {
-//         console.log(e.message);
-//       }
-
-//       return cb(null, profile);
-//     }
-//   )
-// );
+      return cb(null, newUser);
+    }
+  )
+);
 
 passport.serializeUser((user, cb) => {
   cb(null, user);
@@ -97,4 +79,3 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((obj, cb) => {
   cb(null, obj);
 });
-
