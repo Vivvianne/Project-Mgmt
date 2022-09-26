@@ -37,3 +37,13 @@ window.onclick = function (event) {
     modal.style.display = "none";
   }
 };
+
+// commentBtn.onclick = function () {
+//   console.log("adding comment");
+//   modalForm.style.display = "block";
+// };
+// for (var i = 0; i < commentBtn.length; i++) {
+//   closeSpan[0].onclick = () => {
+//     modalForm[i].style.display = "none";
+//   };
+// }

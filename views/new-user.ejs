@@ -10,10 +10,10 @@
   <body>
     <%- include("./partials/_header", {isAuth: isAuth, rights: rights}) %>
 
-    <main class="new-project-main">
+    <main class="new-user-main">
       <h1>Create a New User</h1>
 
-      <form action="/admin/new-user" method="post">
+      <form action="/admin/new-user" method="post" class="new-user-form">
         <label for="name">Name: </label>
         <input type="text" name="name" id="name" />
         <label for="email">Email: </label>

@@ -17,10 +17,10 @@
   <body>
     <header><%- include("./partials/_header", {isAuth: isAuth}) %></header>
 
-    <main>
+    <main class="signup-main">
       <h1>Signup</h1>
 
-      <form action="/auth/signup" method="post">
+      <form action="/auth/signup" method="post" class="signup-form">
         <label for="name">Name: </label
         ><input type="name" name="name" id="name" />
         <label for="email">Email: </label
@@ -37,17 +37,20 @@
         <hr>
 
         <div class="social-login-div">
-          <a href="/auth/google" class="google-btn">
-            <i class="fab fa-google left"></i>Login With Google
-          </a>
-
-          <a href="/auth/facebook" class="facebook-btn">
-            <i class="fab fa-facebook left"></i>Login With Facebook
-          </a>
-
-          <a href="/auth/twitter" class="twitter-btn">
-            <i class="fab fa-twitter left"></i>Login With Twitter
-          </a>
+          <h2>Social Accounts</h2>
+          <div> 
+            <a href="/auth/google" class="google-btn">
+              <i class="fab fa-google left"></i>Login With Google
+            </a>
+  
+            <a href="/auth/facebook" class="facebook-btn">
+              <i class="fab fa-facebook left"></i>Login With Facebook
+            </a>
+  
+            <a href="/auth/twitter" class="twitter-btn">
+              <i class="fab fa-twitter left"></i>Login With Twitter
+            </a>
+          </div>
         </div>
       </form>
     </main>

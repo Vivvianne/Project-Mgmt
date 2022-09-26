@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../main.css" />
+    <title>Student Details</title>
+
+  </head>
+  <body>
+    <header>
+      <%- include('./partials/_header', {isAuth: isAuth, rights: rights}) %>
+    </header>
+
+    <main>
+      <section class="student-profile">
+        <div class="student-name">
+          <h1><%= studentName %></h1>
+        </div>
+      </section>
+
+      <section class="enrolled-courses">
+        <h1>Enrolled Courses</h1>
+        <hr />
+        <% if(courses.length <= 0) { %>
+        <p>No enrolled courses</p>
+        <% } else { %>
+        <ul class="courses-list">
+          <% for(let course of courses) { %>
+          <li><%= course.title %></li>
+          <% } %>
+        </ul>
+        <% } %>
+      </section>
+
+      <section class="assigned-tasks">
+        <h1>Assigned Tasks</h1>
+        <hr />
+        <% if(tasks.length <= 0) { %>
+        <p>No tasks assigned for this student</p>
+        <% } else {%>
+        <ul class="task-list">
+          <% for(let task of tasks) { %>
+          <li><%= task.title %></li>
+
+          <!-- add comment to tasks -->
+          <% if(rights === 'admin') { %>
+          <button class="comments-btn ">Add a comment</button>
+          <br>
+          <br>
+          <br>
+          
+          <% } %>
+
+          <div class="comments-modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>Leave a comment</h2>
+              <form
+                action="/admin/comment/<%= studentId %>/<%= task.id %>"
+                method="post"
+              >
+                <textarea
+                  name="comment"
+                  id=""
+                  cols="50"
+                  rows="10"
+                  placeholder="Leave a comment for <%= studentName %>"
+                  style="resize: none"
+                >
+                </textarea>
+                <div class="select-fields-div">
+                  <button type="submit" style="float: left">Comment</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <% } %>
+        </ul>
+        <% } %>
+      </section>
+    </main>
+
+    <script src="/comments.js"></script>
+  </body>
+</html>

@@ -19,7 +19,7 @@
       <%- include('./partials/_header',{isAuth: isAuth, rights: rights}) %>
     </header>
 
-    <main>
+    <main class="landingpage-main">
       <div class="main-header">
         <h1>Available Topics</h1>
 
@@ -41,21 +41,20 @@
       <% } else { %>
 
       <div class="div-cards">
-        <% for(var i=0; i < data.length; i++) { %>
-        <a href="/projects/<%= data[i].id %>">
-          <div class="card">
-            <h3><%= data[i].title %></h3>
-            <p><%= data[i].description %></p>
+        <% for(let item of data) { %>
+
+        <div class="card">
+          <a href="/projects/<%= item.id %>">
+            <h3 class="card-title"><%= item.title %></h3>
+            <p class="card-desc"><%= item.description %></p>
             <% if(rights=='admin') { %>
-            <form
-              action="/admin/delete-project/<%= data[i].id %>"
-              method="post"
-            >
-              <button name="delete">Delete Topic</button>
+            <form action="/admin/delete-project/<%= item.id %>" method="post">
+              <button   name="delete" class="delete-btn">Delete Topic</button>
             </form>
             <% } %>
-          </div>
-        </a>
+          </a>
+        </div>
+
         <% } %>
       </div>
 

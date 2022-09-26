@@ -68,7 +68,7 @@ exports.createTopic = async (req, res, next) => {
 exports.createProgram = async (req, res, next) => {
   const projectTitle = req.params.projectTitle;
 
-  const { name, desc, video } = req.body;
+  const { name, desc } = req.body;
 
   let author = req.session.user.name;
 
@@ -113,6 +113,24 @@ exports.deleteProject = async (req, res, next) => {
   try {
     await db.collection("projects").doc(projectTitle).delete();
     return res.redirect("/");
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+exports.deleteProgram = async (req, res) => {
+  const projectTitle = req.params.title;
+  const programId = req.params.programId;
+
+  try {
+    const resp = await db
+      .collection("projects")
+      .doc(projectTitle)
+      .collection("programs")
+      .doc(programId)
+      .delete();
+
+    res.redirect("/");
   } catch (e) {
     console.log(e.message);
   }
@@ -227,9 +245,32 @@ exports.assignTasks = async (req, res) => {
       .set(task);
 
     console.log(`Task assigned to user ${userId}`);
-    
     res.redirect("/");
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+exports.addComment = async (req, res) => {
+  const { id, taskId } = req.params;
+  const commentContent = req.body.comment;
+
+  let comment = {
+    content: commentContent,
+    user: req.session.user.name,
+  };
+
+  try {
+    await db
+      .collection("users")
+      .doc(id)
+      .collection("tasks")
+      .doc(taskId)
+      .collection("comments")
+      .add(comment);
+
+    res.redirect(`/students`);
+  } catch (e) {
+    console.log(e.message);
   }
 };

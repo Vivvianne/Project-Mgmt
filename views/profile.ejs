@@ -9,10 +9,11 @@
   </head>
   <body>
     <header>
-      <%- include("./partials/_header.ejs", {isAuth: isAuth, rights: user.rights}) %>
+      <%- include("./partials/_header.ejs", {isAuth: isAuth, rights:
+      user.rights}) %>
     </header>
 
-    <main>
+    <main class="profile-main">
       <h1><%= user.name %>'s Profile</h1>
       <div class="profile-courses">
         <% if(courses.length <= 0) { %>
@@ -27,24 +28,28 @@
         <% } else {%>
         <h2>Enrolled Courses</h2>
         <ul>
-          <% for(var i=0;i < courses.length; i++) { %>
-          <li><%= courses[i].title %></li>
+          <% for(let course of courses) { %>
+          <li><%= course.name %></li>
           <% } %>
         </ul>
         <% } %>
       </div>
 
       <div class="profile-assigned-tasks">
-        <%if(tasks.length <= 0) {%>
+        <%if(tasks.length <= 0) { %>
         <p>No tasks have been assigned to you</p>
-        <%}else {%>
+        <% } else { %>
         <h2 style="margin-top: 2rem">Assigned Tasks</h2>
         <ul>
-          <% for(var i=0;i < tasks.length; i++) { %>
-          <li><%= tasks[i].title %></li>
+          <% for(let task of tasks) { %>
+          <li>
+            <a href=" /comments/<%= task.name %>/<%= task.id %>"
+              ><%= task.name %></a
+            >
+          </li>
           <% } %>
         </ul>
-        <% }%>
+        <% } %>
       </div>
     </main>
   </body>

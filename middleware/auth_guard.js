@@ -7,7 +7,7 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 exports.isAdmin = (req, res, next) => {
-  if (req.session.rights === "admin") {
+  if (req.session.user.rights === "admin") {
     return next();
   } else {
     console.log("Unauthorized!");

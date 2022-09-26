@@ -1,4 +1,8 @@
+const { getStorage, ref, uploadBytes } = require("firebase/storage");
+
 const db = require("../config").firestore();
+
+const storage = getStorage();
 
 exports.getLandingPage = async (req, res, next) => {
   try {
@@ -111,6 +115,7 @@ exports.getStudentsPage = async (req, res, next) => {
 
     data = snapshot.docs.map((student) => {
       return {
+        id: student.id,
         name: student.data().name,
         email: student.data().email,
         status: student.data().status,
@@ -170,6 +175,7 @@ exports.getTeamleadsPage = async (req, res, next) => {
 exports.getProfilePage = async (req, res, next) => {
   let courseData;
   let tasksData;
+  let commentsData;
 
   let userId = req.session.user.userId;
 
@@ -196,17 +202,17 @@ exports.getProfilePage = async (req, res, next) => {
 
     courseData = courseSnapshot.docs.map((course) => {
       return {
-        title: course.data().title,
+        id: course.id,
+        name: course.data().title,
       };
     });
 
     tasksData = taskSnapshot.docs.map((task) => {
       return {
-        title: task.data().name,
+        id: task.id,
+        name: task.data().name,
       };
     });
-
-    console.log(req.session);
 
     return res.render("profile.ejs", {
       user: req.session.user,
@@ -217,6 +223,113 @@ exports.getProfilePage = async (req, res, next) => {
   } catch (e) {
     console.log(e.message);
   }
+};
+
+// view student's details
+exports.getStudentDetailsPage = async (req, res) => {
+  // user id
+  const { name, id } = req.params;
+
+  let courseData;
+  let taskData;
+
+  try {
+    const coursesSnapshot = await db
+      .collection("users")
+      .doc(id)
+      .collection("courses")
+      .get();
+
+    const taskSnapshot = await db
+      .collection("users")
+      .doc(id)
+      .collection("tasks")
+      .get();
+
+    if (coursesSnapshot.empty) {
+      courseData = [];
+    }
+    if (taskSnapshot.empty) {
+      taskData = [];
+    }
+
+    courseData = coursesSnapshot.docs.map((course) => {
+      return {
+        id: course.id,
+        title: course.data().title,
+      };
+    });
+
+    taskData = taskSnapshot.docs.map((task) => {
+      return {
+        id: task.id,
+        title: task.data().name,
+      };
+    });
+
+    res.render("userDetailsPage.ejs", {
+      studentId: id,
+      studentName: name,
+      isAuth: req.session.user ? true : false,
+      rights: req.session.user.rights,
+      courses: courseData,
+      tasks: taskData,
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+exports.getCommentsPage = async (req, res) => {
+  const { taskTitle, taskId } = req.params;
+
+  let commentsData;
+
+  const commentsSnapshot = await db
+    .collection("users")
+    .doc(req.session.user.userId)
+    .collection("tasks")
+    .doc(taskId)
+    .collection("comments")
+    .get();
+
+  if (commentsSnapshot.empty) {
+    commentsData = [];
+  }
+  commentsData = commentsSnapshot.docs.map((comment) => {
+    return {
+      id: comment.id,
+      content: comment.data().content,
+      commentBy: comment.data().user,
+    };
+  });
+
+  res.render("comments-page.ejs", {
+    taskTitle: taskTitle,
+    comments: commentsData,
+    isAuth: req.session.user ? true : false,
+    rights: req.session.user.rights,
+  });
+};
+
+exports.getTestPage = (req, res) => {
+  res.render("file_upload.ejs");
+};
+
+exports.uploadFile = (req, res) => {
+  const file = req.body.file;
+
+  const filesRef = ref(storage, "file.jpg");
+  // const fileDataRef = ref(storage, "images/file.jpg");
+  try {
+    uploadBytes(filesRef, file).then((snapshot) => {
+      console.log("uploaded a file" + snapshot);
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  console.log(file);
 };
 
 exports.logout = (req, res, next) => {

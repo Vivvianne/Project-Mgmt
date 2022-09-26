@@ -33,8 +33,24 @@ router.get(
   landingPageController.getNewProgramPage
 );
 
+router.get(
+  "/comments/:taskTitle/:taskId",
+  isAuthenticated,
+  landingPageController.getCommentsPage
+);
+
+router.get(
+  "/students/:name/:id",
+  isAuthenticated,
+  landingPageController.getStudentDetailsPage
+);
+
 router.get("/profile", isAuthenticated, landingPageController.getProfilePage);
 
 router.get("/logout", landingPageController.logout);
+
+router.get("/file-upload", landingPageController.getTestPage);
+
+router.post("/file-upload", landingPageController.uploadFile);
 
 module.exports = router;

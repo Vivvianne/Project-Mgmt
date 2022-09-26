@@ -13,57 +13,25 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-
-    <style>
-      .accordion {
-        background-color: #eee;
-        color: #444;
-        cursor: pointer;
-        padding: 18px;
-        width: 55%;
-        margin: 0 auto;
-        border: none;
-        text-align: left;
-        outline: none;
-        font-size: 15px;
-        transition: 0.4s;
-      }
-
-      .active,
-      .accordion:hover {
-        background-color: #ccc;
-      }
-
-      .panel {
-        padding: 16px;
-        display: none;
-        overflow: hidden;
-        width: 50%;
-      }
-      .new-program-btn {
-        float: right;
-        margin-top: 2rem;
-      }
-    </style>
   </head>
   <body>
     <header>
       <%- include('./partials/_header', {isAuth: isAuth, rights: rights}) %>
     </header>
 
-    <main>
-      <a class="new-program-btn" href="/<%= title %>/new-program">
-        <span><i class="fa fa-plus"></i></span>
-        New Project
-      </a>
+    <main class="project-dets-main">
       <div class="main-header">
         <h1><%= title %></h1>
 
+        <a class="new-program-btn" href="/<%= title %>/new-program">
+          <span><i class="fa fa-plus"></i></span>
+          New Project
+        </a>
+
         <% if (rights=='student') {%>
         <form action="/students/enroll/<%= title %>" method="post">
-          <button type="submit">Enroll</button>
+          <button type="submit" class="enroll-btn">Enroll</button>
         </form>
-        <!-- <a class="new-program-btn" href="/students/enroll/<%= title %>"> Enroll </a> -->
         <% } %>
       </div>
 
@@ -78,9 +46,8 @@
         <div class="nothing-div">
           <p>no Tasks yet</p>
         </div>
-        <%} } else { %>
-        <ul>
-          <% for(var i=0; i < data.length; i++) { %>
+        <%} } else { %> <% for(var i=0; i < data.length; i++) { %>
+        <div class="accordion-div">
           <button class="accordion">
             <%= data[i].name %> <% if(data[i].author != 'admin') { %> -
             <i>Created by <%= data[i].author %></i>
@@ -89,16 +56,22 @@
           </button>
           <div class="panel">
             <p><%= data[i].desc %></p>
+            <form
+              action="/admin/delete/<%= title %>/<%= data[i].id %>"
+              method="post"
+            >
+              <button type="submit">
+                <i class="fa fa-trash delete-btn"></i>
+              </button>
+            </form>
           </div>
+        </div>
 
-          <% } %>
-        </ul>
+        <% } %>
         <!-- display the modal button to assign project-->
-        <!-- <% if(rights == 'admin') { %> -->
-        <button id="myBtn">Assign Project</button>
-        <!-- <% } %> -->
+        <button id="myBtn" class="assign-tasks-btn">Assign Project</button>
 
-        <div id="myModal" class="modal">
+        <div id="myModal" class="assign-task-modal">
           <div class="modal-content">
             <span class="close">&times;</span>
 

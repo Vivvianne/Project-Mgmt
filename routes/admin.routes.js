@@ -38,6 +38,13 @@ router.post(
   adminController.deleteProject
 );
 
+router.post(
+  "/delete/:title/:programId",
+  isAuthenticated,
+  isAdmin,
+  adminController.deleteProgram
+);
+
 router.get(
   "/students",
   isAuthenticated,
@@ -56,6 +63,12 @@ router.get(
   "/:projectTitle/programs",
   isAuthenticated,
   adminController.getProjectPrograms
+);
+
+router.post(
+  "/comment/:id/:taskId",
+  isAuthenticated,
+  adminController.addComment
 );
 
 router.post("/assign-task", isAuthenticated, adminController.assignTasks);

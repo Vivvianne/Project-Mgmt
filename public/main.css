@@ -1,42 +1,27 @@
 body {
   margin: 0;
-}
-
-main {
-  padding: 1rem;
-}
-
-a {
-  text-decoration: none;
-  color: black;
+  font-family: "Open Sans", sans-serif;
 }
 
 nav {
+  background-color: rgb(107, 197, 253);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
+  padding: 0 1rem;
+  box-shadow: 1px 2px #888888;
 }
 
-header {
-  width: 100%;
-  background-color: rgb(240, 240, 240);
-}
-
-nav ul {
-  list-style: none;
-  margin: 0;
+nav h2 a {
+  text-decoration: none;
+  font-size: 30px;
+  color: black;
 }
 
 nav ul li {
+  list-style: none;
   display: inline-block;
   margin: 0 2rem;
   padding: 1rem 0;
-}
-
-nav ul li:hover {
-  /* border-bottom: 2px solid black; */
-  font-weight: bold;
 }
 
 nav ul li a {
@@ -44,46 +29,47 @@ nav ul li a {
   color: black;
 }
 
-form {
-  background-color: rgb(240, 240, 240);
-  padding: 3rem;
-  width: 70%;
-  margin: 2rem auto;
-}
-
-form a {
-  text-decoration: underline;
-}
-
-input {
-  width: 80%;
-  padding: 1rem;
-  display: block;
-  margin: 1rem 0;
-  border-style: none;
-  font-size: 17px;
-  color: grey;
-}
-
 nav form {
-  margin: 0;
   display: inline;
 }
 
-nav input {
-  width: 100px;
-  padding: 0;
-  display: inline-block;
+nav form button {
+  background-color: transparent;
+  border-style: none;
+  padding: 10px;
   font-size: 16px;
-  color: black;
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
 }
 
-button {
-  background-color: black;
+.login-main,
+.signup-main {
+  width: 50%;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.login-form input,
+.signup-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 18px;
+  color: grey;
+}
+
+.login-form input:focus,
+.signup-form input:focus {
+  outline: none;
+}
+
+.login-form button,
+.signup-form button {
+  display: block;
+  background-color: rgb(38, 161, 255);
   color: white;
   border-style: none;
   padding: 10px;
@@ -91,131 +77,25 @@ button {
   min-width: 100px;
 }
 
-main .main-header {
+.social-login-div > div {
+  margin-top: 2rem;
   display: flex;
-  justify-content: space-between;
-  padding: 0 1rem;
-  align-items: flex-end;
-}
-
-.add-program-div {
-  width: 50%;
-  margin: 3rem auto;
-  text-align: center;
-  font-size: large;
-  background-color: rgb(240, 240, 240);
-  padding: 2rem;
-  color: grey;
-}
-
-.add-program-div i {
-  font-size: 36px;
-}
-
-.div-cards {
-  width: 80%;
-  margin: 2rem auto;
-  padding: 3rem;
-  background-color: rgb(240, 240, 240);
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.card {
-  border: 1px solid rgb(164, 164, 164);
-  width: 300px;
-  padding: 0 2rem;
-  margin: 10px;
-  min-height: 250px;
-}
-
-.card p {
-  background-color: white;
-  padding: 16px;
-  border-radius: 5px;
-}
-
-.card:hover {
-  cursor: pointer;
-}
-
-.new-project-btn,
-.new-program-btn {
-  color: green;
-}
-
-.div-programs ul {
-  list-style: none;
-}
-
-.div-programs ul li {
-  padding: 16px;
-  background-color: rgb(240, 240, 240);
-  width: 70%;
-  margin: 5px auto;
-  font-size: 18px;
-}
-
-.div-programs .project-more-info {
-  background-color: white;
-}
-
-.new-project-main {
-  width: 50%;
-  margin: 3rem auto;
-  background-color: rgb(240, 240, 240);
-  padding: 2rem;
-}
-
-.students-div {
-  width: 70%;
-  background-color: rgb(240, 240, 240);
-  margin: 3rem auto;
-  padding: 2rem;
-}
-
-.student {
-  display: flex;
+  padding: 1rem 0;
   justify-content: space-around;
-  align-items: center;
 }
 
-.student i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.twitter-btn,
+.facebook-btn,
+.google-btn {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+}
+
+.twitter-btn i,
+.facebook-btn i,
+.google-btn i {
   margin-right: 10px;
-}
-
-.new-student-link {
-  color: green;
-  padding: 3px;
-  border-bottom: 2px solid green;
-}
-
-select {
-  appearance: none;
-  background-color: white;
-  border: none;
-  padding: 1em;
-  width: 80%;
-  display: block;
-  padding: 16px;
-  font-family: inherit;
-  font-size: inherit;
-  cursor: inherit;
-  line-height: inherit;
-  margin: 10px 0;
-}
-
-select:focus {
-  outline: none;
-}
-
-.social-login-div {
-  margin-top: 1rem;
 }
 
 .google-btn {
@@ -230,64 +110,335 @@ select:focus {
   background-color: rgb(21, 186, 232);
 }
 
-.google-btn,
-.facebook-btn,
-.twitter-btn {
-  padding: 10px;
-  color: white;
-  margin: 0 2rem 0 0;
+.landingpage-main {
+  padding: 3rem 5rem;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.div-cards .card {
+  display: inline-block;
+  width: 300px;
+  margin-right: 2rem;
+}
+
+.div-cards .card a {
   text-decoration: none;
-  font-family: "Open Sans", sans-serif;
 }
 
-.google-btn i,
-.facebook-btn i {
-  margin-right: 10px;
+.card-desc {
+  background-color: rgb(107, 197, 253);
+  padding: 1rem;
 }
 
-hr {
-  width: 80%;
-  margin-left: 0;
-  margin-bottom: 1rem;
+.card .delete-btn {
+  border-style: none;
+  padding: 10px;
+  font-size: 17px;
 }
 
-.modal {
+.accordion-div {
+  width: 70%;
+  margin: 1rem auto;
+}
+
+.accordion {
+  padding: 1rem;
+  width: 100%;
+  border-style: none;
+  transition: 0.4s;
+}
+
+.active,
+.accordion:hover {
+  background-color: rgb(199, 233, 254);
+}
+
+.panel {
+  padding: 16px;
+  display: none;
+  overflow: hidden;
+}
+
+.panel button {
+  border-style: none;
+  padding: 12px;
+  font-size: 18px;
+  color: red;
+}
+
+.new-program-btn {
+  float: right;
+  margin-top: 2rem;
+}
+
+.enroll-btn {
+  background-color: white;
+  color: rgb(118, 203, 255);
+  border-style: none;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.project-dets-main {
+  width: 70%;
+  margin: 2rem auto;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-header a {
+  text-decoration: none;
+  color: black;
+  border: 1px solid black;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.assign-tasks-btn {
+  background-color: rgb(199, 233, 254);
+  color: black;
+  border-style: none;
+  padding: 10px;
+}
+
+.assign-task-modal {
   display: none;
   position: fixed;
   z-index: 1;
-  padding-top: 100px;
+  padding-top: 10rem;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-  background-color: rgb(209, 209, 209);
-  margin: auto;
-  padding: 3rem;
-  border: 1px solid #888;
   width: 50%;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  padding: 3rem;
 }
 
-.select-fields-div {
+.modal-content span {
+  float: right;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.select-fields-div select {
+  display: block;
+  width: 60%;
+  padding: 10px;
+  margin-bottom: 2rem;
+}
+.select-fields-div select:focus {
+  outline: none;
+}
+
+.select-fields-div button {
+  border-style: none;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  width: 20%;
+}
+
+.new-project-main,
+.new-user-main {
   width: 50%;
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.new-program-form input {
+  display: block;
+  width: 90%;
+  padding: 10px;
+  margin: 1rem 0 3rem 0;
+}
+
+.new-program-form input:focus {
+  outline: none;
+}
+
+.new-program-form button {
+  border-style: none;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  width: 20%;
   margin: 0 auto;
 }
 
-.close {
-  color: #000;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+.new-topic-form input {
+  display: block;
+  width: 90%;
+  padding: 10px;
+  margin: 1rem 0 3rem 0;
 }
 
-.close:hover,
-.close:focus {
-  color: #aaaaaa;
+.new-topic-form input:focus {
+  outline: none;
+}
+
+.new-topic-form button {
+  border-style: none;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  width: 20%;
+  margin: 0 auto;
+}
+
+.teamleads-main,
+.students-main {
+  width: 70%;
+  margin: 2rem auto;
+}
+
+.students-div {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.students-div .student {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid grey;
+}
+
+.student i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.students-div .student a {
+  color: black;
   text-decoration: none;
-  cursor: pointer;
+}
+
+.new-user-form input,
+.new-user-form select {
+  display: block;
+  width: 90%;
+  padding: 10px;
+  margin: 1rem 0 2rem 0;
+  color: grey;
+}
+
+.new-user-form button {
+  border-style: none;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  width: 20%;
+  float: left;
+  margin: 0 auto;
+}
+.student-profile {
+  margin: 2rem 0;
+  width: 60%;
+  margin: 5rem auto 3rem auto;
+}
+.student-profile h1 {
+  font-size: 30px;
+}
+.enrolled-courses,
+.assigned-tasks {
+  border: 1px solid rgb(240, 240, 240);
+  border-radius: 5px;
+  padding: 0 1rem;
+  width: 60%;
+  margin: 1rem auto 3rem auto;
+}
+
+hr {
+  color: rgb(240, 240, 240);
+}
+
+.courses-list,
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.courses-list li,
+.task-list li {
+  margin: 5px 0;
+  font-size: 17px;
+  padding: 1rem;
+  background-color: rgb(199, 233, 254);
+}
+
+.comments-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 10rem;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.comments-modal .modal-content {
+  width: 30%;
+  padding: 3rem;
+}
+
+.comments-btn {
+  border-style: none;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  width: 20%;
+  float: left;
+  margin: 0 auto;
+}
+
+.profile-main,
+.comments-main {
+  width: 70%;
+  margin: 3rem auto;
+}
+
+.profile-courses ul,
+.profile-assigned-tasks ul {
+  list-style: none;
+}
+
+.profile-courses ul li,
+.profile-assigned-tasks ul li {
+  padding: 10px;
+  border: 1px solid grey;
+}
+
+.comment-item {
+  width: 25%;
+  list-style: none;
+  padding: 3rem;
+  background-color: rgb(223, 223, 223);
+  border-radius: 25%;
+}
+
+.comment-item i {
+  float: right;
 }

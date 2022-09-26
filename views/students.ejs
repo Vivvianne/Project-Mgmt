@@ -19,7 +19,7 @@
       <%- include('./partials/_header', {isAuth: isAuth, rights: rights}) %>
     </header>
 
-    <main>
+    <main class="students-main">
       <div class="main-header">
         <h1>Enrolled students</h1>
 
@@ -45,10 +45,11 @@
       <div class="students-div">
         <% for(var i=0; i < students.length; i++) { %>
         <div class="student">
-          <h3><%= students[i].name %></h3>
-          |
+          <a href="/students/<%= students[i].name %>/<%=  students[i].id %>">
+            <h3><%= students[i].name %></h3>
+          </a>
           <p><%= students[i].email %></p>
-          |
+
           <p>
             <span class="circle-icon">
               <% if(students[i].status == 'active') { %>
