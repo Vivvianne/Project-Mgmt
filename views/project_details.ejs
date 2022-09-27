@@ -25,12 +25,12 @@
 
         <a class="new-program-btn" href="/<%= title %>/new-program">
           <span><i class="fa fa-plus"></i></span>
-          New Project
+          New Task
         </a>
 
         <% if (rights=='student') {%>
         <form action="/students/enroll/<%= title %>" method="post">
-          <button type="submit" class="enroll-btn">Enroll</button>
+          <button type="submit" class="enroll-btn">Be Asigned</button>
         </form>
         <% } %>
       </div>
@@ -69,7 +69,7 @@
 
         <% } %>
         <!-- display the modal button to assign project-->
-        <button id="myBtn" class="assign-tasks-btn">Assign Project</button>
+        <button id="myBtn" class="assign-tasks-btn">Assign a Task</button>
 
         <div id="myModal" class="assign-task-modal">
           <div class="modal-content">
@@ -77,8 +77,8 @@
 
             <form action="/admin/assign-task" method="post">
               <div class="select-fields-div">
-                <h2>Assign Project</h2>
-                <label for="project">Choose Project:</label>
+                <h2>Assign A Task</h2>
+                <label for="project">Choose a Task:</label>
                 <select name="taskName" id="taskName" class="select-option">
                   <% for(var i=0; i < data.length; i++) { %>
                   <option value="<%= data[i].name %>">

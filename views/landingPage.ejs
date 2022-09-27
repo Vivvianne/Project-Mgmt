@@ -21,12 +21,12 @@
 
     <main class="landingpage-main">
       <div class="main-header">
-        <h1>Available Topics</h1>
+        <h1>Available Projects</h1>
 
         <% if(rights=='admin') { %>
         <a class="new-project-btn" href="/new-topic">
           <span><i class="fa fa-plus"></i></span>
-          New Topic
+          New Project
         </a>
         <% } %>
       </div>
@@ -49,7 +49,7 @@
             <p class="card-desc"><%= item.description %></p>
             <% if(rights=='admin') { %>
             <form action="/admin/delete-project/<%= item.id %>" method="post">
-              <button   name="delete" class="delete-btn">Delete Topic</button>
+              <button   name="delete" class="delete-btn">Delete Project</button>
             </form>
             <% } %>
           </a>
