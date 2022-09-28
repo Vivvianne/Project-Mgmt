@@ -12,9 +12,9 @@ router.post(
 );
 
 router.post(
-  "/:projectTitle/new-program",
+  "/:projectTitle/new-task",
   isAuthenticated,
-  adminController.createProgram
+  adminController.createTask
 );
 
 router.put(
@@ -39,10 +39,10 @@ router.post(
 );
 
 router.post(
-  "/delete/:title/:programId",
+  "/delete/:taskId",
   isAuthenticated,
   isAdmin,
-  adminController.deleteProgram
+  adminController.deleteTask
 );
 
 router.get(
@@ -57,12 +57,6 @@ router.get(
   isAuthenticated,
   isAdmin,
   adminController.getAllProjects
-);
-
-router.get(
-  "/:projectTitle/programs",
-  isAuthenticated,
-  adminController.getProjectPrograms
 );
 
 router.post(

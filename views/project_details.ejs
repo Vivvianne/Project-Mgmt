@@ -23,14 +23,14 @@
       <div class="main-header">
         <h1><%= title %></h1>
 
-        <a class="new-program-btn" href="/<%= title %>/new-program">
+        <a class="new-program-btn" href="/<%= title %>/new-task">
           <span><i class="fa fa-plus"></i></span>
           New Task
         </a>
 
         <% if (rights=='student') {%>
         <form action="/students/enroll/<%= title %>" method="post">
-          <button type="submit" class="enroll-btn">Be Asigned</button>
+          <button type="submit" class="enroll-btn">Enroll</button>
         </form>
         <% } %>
       </div>
@@ -38,7 +38,7 @@
       <div class="div-programs">
         <% if(data.length <= 0) { if(rights=='admin') { %>
         <div class="add-program-div">
-          <i class="fa fa-plus"></i>
+          <!-- <i class="fa fa-plus"></i> -->
           <p>Add tasks from top right corner</p>
         </div>
 
@@ -56,10 +56,14 @@
           </button>
           <div class="panel">
             <p><%= data[i].desc %></p>
-            <form
-              action="/admin/delete/<%= title %>/<%= data[i].id %>"
-              method="post"
-            >
+            <!-- <video  controls> -->
+            <iframe
+              width="450"
+              height="260"
+              src="<%= data[i].videoUrl %>"
+            ></iframe>
+            <!-- </video> -->
+            <form action="/admin/delete/<%= data[i].id %>" method="post">
               <button type="submit">
                 <i class="fa fa-trash delete-btn"></i>
               </button>
@@ -69,7 +73,9 @@
 
         <% } %>
         <!-- display the modal button to assign project-->
-        <button id="myBtn" class="assign-tasks-btn">Assign a Task</button>
+        <% if(rights == 'admin') { %>
+        <button id="myBtn" class="assign-tasks-btn">Assign Project</button>
+        <% } %>
 
         <div id="myModal" class="assign-task-modal">
           <div class="modal-content">
@@ -77,8 +83,8 @@
 
             <form action="/admin/assign-task" method="post">
               <div class="select-fields-div">
-                <h2>Assign A Task</h2>
-                <label for="project">Choose a Task:</label>
+                <h2>Assign Project</h2>
+                <label for="project">Choose Project:</label>
                 <select name="taskName" id="taskName" class="select-option">
                   <% for(var i=0; i < data.length; i++) { %>
                   <option value="<%= data[i].name %>">

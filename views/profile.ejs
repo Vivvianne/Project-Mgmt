@@ -16,20 +16,20 @@
     <main class="profile-main">
       <h1><%= user.name %>'s Profile</h1>
       <div class="profile-courses">
-        <% if(courses.length <= 0) { %>
-        <p>You are not assigned to any Projects</p>
+        <% if(projects.length <= 0) { %>
+        <p>You are not enrolled to any projects</p>
         <p>
           Go to
           <span
             ><a href="/" style="text-decoration: underline">Home page</a></span
           >
-          to assign
+          to enroll
         </p>
         <% } else {%>
-        <h2>Assigned Projects</h2>
+        <h2>Enrolled Projects</h2>
         <ul>
-          <% for(let course of courses) { %>
-          <li><%= course.name %></li>
+          <% for(let project of projects) { %>
+          <li><%= project.name %></li>
           <% } %>
         </ul>
         <% } %>

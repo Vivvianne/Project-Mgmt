@@ -4,6 +4,8 @@ const cors = require("cors");
 const logger = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
+const engines = require("consolidate");
+const fileUpload = require("express-fileupload");
 
 // app routes
 const authRoutes = require("./routes/auth.routes");
@@ -36,11 +38,14 @@ app.use(passport.session());
 
 // render static files
 app.use(express.static("public"));
-app.set("views", "./views");
 
 // set view engine to ejs
-app.set("view-engine", "ejs");
+app.engine("ejs", engines.ejs);
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
+// support file upload
+app.use(fileUpload())
 // use morgan to get meaningful logs
 app.use(logger("dev"));
 

@@ -12,7 +12,7 @@ router.get(
 );
 
 router.get(
-  "/new-topic",
+  "/new-project",
   isAuthenticated,
   landingPageController.getNewProjectPage
 );
@@ -28,9 +28,9 @@ router.get(
 );
 
 router.get(
-  "/:projectId/new-program",
+  "/:projectId/new-task",
   isAuthenticated,
-  landingPageController.getNewProgramPage
+  landingPageController.getNewtaskPage
 );
 
 router.get(
@@ -48,9 +48,5 @@ router.get(
 router.get("/profile", isAuthenticated, landingPageController.getProfilePage);
 
 router.get("/logout", landingPageController.logout);
-
-router.get("/file-upload", landingPageController.getTestPage);
-
-router.post("/file-upload", landingPageController.uploadFile);
 
 module.exports = router;

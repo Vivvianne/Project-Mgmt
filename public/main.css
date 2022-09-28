@@ -128,6 +128,7 @@ select:focus {
 
 .div-cards .card a {
   text-decoration: none;
+  color: rgb(0, 0, 191);
 }
 
 .card-desc {

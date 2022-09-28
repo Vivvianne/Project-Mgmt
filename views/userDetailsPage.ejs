@@ -21,14 +21,14 @@
       </section>
 
       <section class="enrolled-courses">
-        <h1>Projects Assigned</h1>
+        <h1>Enrolled Projects</h1>
         <hr />
-        <% if(courses.length <= 0) { %>
-        <p>No enrolled courses</p>
+        <% if(projects.length <= 0) { %>
+        <p>No enrolled projects</p>
         <% } else { %>
         <ul class="courses-list">
-          <% for(let course of courses) { %>
-          <li><%= course.title %></li>
+          <% for(let project of projects) { %>
+          <li><%= project.title %></li>
           <% } %>
         </ul>
         <% } %>

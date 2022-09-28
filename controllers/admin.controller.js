@@ -64,28 +64,47 @@ exports.createTopic = async (req, res, next) => {
   }
 };
 
+const {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} = require("firebase/storage");
+const storage = getStorage();
+
 // create project
-exports.createProgram = async (req, res, next) => {
+exports.createTask = async (req, res, next) => {
   const projectTitle = req.params.projectTitle;
 
-  const { name, desc } = req.body;
-
   let author = req.session.user.name;
+  const { name, desc } = req.body;
+  // data from the formData
+  const file = req.files.myFile;
 
-  const program = {
-    name: name,
-    description: desc,
-    author: author,
+  // setup the storage reference for the file
+  var storageRef = ref(storage, file.name);
+
+  // set custom content type of file
+  const metadata = {
+    contentType: "video/mp4",
   };
 
   try {
-    await db
-      .collection("projects")
-      .doc(projectTitle.toLowerCase())
-      .collection("programs")
-      .add({ program });
+    // upload via blob or file
+    await uploadBytes(storageRef, file.data, metadata);
+    // get the download url for the video
+    const url = await getDownloadURL(ref(storage, file.name));
 
-    return res.redirect(`/projects/${projectTitle}`);
+
+    await db.collection("tasks").add({
+      projectId: projectTitle.toLowerCase(),
+      name: name,
+      description: desc,
+      author: author,
+      videoUrl: url,
+    });
+
+    res.redirect(`/projects/${projectTitle}`);
   } catch (e) {
     console.log(e.message);
   }
@@ -106,7 +125,7 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-// projects + related programs
+// projects + related tasks
 exports.deleteProject = async (req, res, next) => {
   const projectTitle = req.params.title;
 
@@ -118,18 +137,11 @@ exports.deleteProject = async (req, res, next) => {
   }
 };
 
-exports.deleteProgram = async (req, res) => {
-  const projectTitle = req.params.title;
-  const programId = req.params.programId;
+exports.deleteTask = async (req, res) => {
+  const taskId = req.params.taskId;
 
   try {
-    const resp = await db
-      .collection("projects")
-      .doc(projectTitle)
-      .collection("programs")
-      .doc(programId)
-      .delete();
-
+    await db.collection("tasks").doc(taskId).delete();
     res.redirect("/");
   } catch (e) {
     console.log(e.message);
@@ -185,35 +197,6 @@ exports.getAllProjects = async (req, res, next) => {
   }
 };
 
-// programs
-exports.getProjectPrograms = async (req, res, next) => {
-  const projectTitle = req.params.projectTitle;
-
-  let data;
-
-  try {
-    const snapshot = await db
-      .collection("projects")
-      .doc(projectTitle.toLowerCase())
-      .collection("programs")
-      .get();
-
-    if (snapshot.empty) {
-      data = [];
-    }
-
-    data = snapshot.docs.map((project) => {
-      return {
-        title: project.data().program,
-      };
-    });
-
-    return res.status(200).json({ data: data });
-  } catch (e) {
-    console.log(e.message);
-  }
-};
-
 // make student active/inactive
 exports.changeStudentStatus = async (req, res, next) => {
   const id = req.params.id;
@@ -232,17 +215,16 @@ exports.changeStudentStatus = async (req, res, next) => {
 exports.assignTasks = async (req, res) => {
   const { taskName, userId } = req.body;
 
-  task = {
+  let task = {
     name: taskName,
+    userId: userId,
   };
 
   try {
-    await db
-      .collection("users")
-      .doc(userId)
-      .collection("tasks")
-      .doc()
-      .set(task);
+    // create a tasks collection with name and userId
+    await db.collection("tasks").add(task);
+
+    await db.collection("TasktoUser").add(task);
 
     console.log(`Task assigned to user ${userId}`);
     res.redirect("/");

@@ -4,7 +4,6 @@ const FacebookStrategy = require("passport-facebook").Strategy;
 const TwitterStrategy = require("passport-twitter").Strategy;
 
 const admin = require("../config");
-const db = admin.firestore();
 
 require("dotenv").config();
 

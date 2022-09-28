@@ -1,8 +1,4 @@
-const { getStorage, ref, uploadBytes } = require("firebase/storage");
-
 const db = require("../config").firestore();
-
-const storage = getStorage();
 
 exports.getLandingPage = async (req, res, next) => {
   try {
@@ -19,7 +15,7 @@ exports.getLandingPage = async (req, res, next) => {
         id: project.id,
       };
     });
-    return res.render("landingPage.ejs", {
+    return res.render("landingPage", {
       isAuth: req.session.user ? true : false,
       rights: req.session.user ? req.session.user.rights : "guest",
       data: data,
@@ -29,27 +25,31 @@ exports.getLandingPage = async (req, res, next) => {
   }
 };
 
+const { getStorage, ref } = require("firebase/storage");
+const storage = getStorage();
+
 exports.getProjectDetailsPage = async (req, res, next) => {
   const projectId = req.params.id;
   let data;
   let userData;
+
   try {
     const snapshot = await db
-      .collection("projects")
-      .doc(projectId)
-      .collection("programs")
+      .collection("tasks")
+      .where("projectId", "==", projectId)
       .get();
 
     if (snapshot.empty) {
       data = [];
     }
 
-    data = snapshot.docs.map((program) => {
+    data = snapshot.docs.map((task) => {
       return {
-        id: program.id,
-        name: program.data().program.name,
-        desc: program.data().program.description,
-        author: program.data().program.author,
+        id: task.id,
+        name: task.data().name,
+        desc: task.data().description,
+        author: task.data().author,
+        videoUrl: task.data().videoUrl,
       };
     });
 
@@ -71,7 +71,7 @@ exports.getProjectDetailsPage = async (req, res, next) => {
       };
     });
 
-    return res.render("project_details.ejs", {
+    return res.render("project_details", {
       title: projectId,
       isAuth: req.session.user ? true : false,
       rights: req.session.user.rights,
@@ -84,16 +84,16 @@ exports.getProjectDetailsPage = async (req, res, next) => {
 };
 
 exports.getNewProjectPage = async (req, res, next) => {
-  res.render("new-topic.ejs", {
+  res.render("new-project", {
     isAuth: req.session.user ? true : false,
     rights: req.session.user.rights,
   });
 };
 
-exports.getNewProgramPage = async (req, res, next) => {
+exports.getNewtaskPage = async (req, res, next) => {
   const title = req.params.projectId;
 
-  res.render("new-program.ejs", {
+  res.render("new-task", {
     title: title,
     isAuth: req.session.user ? true : false,
     rights: req.session.user.rights,
@@ -123,7 +123,7 @@ exports.getStudentsPage = async (req, res, next) => {
       };
     });
 
-    return res.render("students.ejs", {
+    return res.render("students", {
       students: data,
       isAuth: req.session.user ? true : false,
       rights: req.session.user.rights,
@@ -134,7 +134,7 @@ exports.getStudentsPage = async (req, res, next) => {
 };
 
 exports.getNewUserPage = (req, res, next) => {
-  res.render("new-user.ejs", {
+  res.render("new-user", {
     isAuth: req.session.user ? true : false,
     rights: req.session.user.rights,
   });
@@ -162,7 +162,7 @@ exports.getTeamleadsPage = async (req, res, next) => {
       };
     });
 
-    return res.render("teamleads.ejs", {
+    return res.render("teamleads", {
       data: data,
       isAuth: req.session.user ? true : false,
       rights: req.session.user.rights,
@@ -173,37 +173,34 @@ exports.getTeamleadsPage = async (req, res, next) => {
 };
 
 exports.getProfilePage = async (req, res, next) => {
-  let courseData;
+  let projectData;
   let tasksData;
-  let commentsData;
 
   let userId = req.session.user.userId;
 
   try {
-    const courseSnapshot = await db
-      .collection("users")
-      .doc(userId)
-      .collection("courses")
+    const projectSnapshot = await db
+      .collection("enrolledProjects")
+      .where("userId", "==", userId)
       .get();
 
     const taskSnapshot = await db
-      .collection("users")
-      .doc(userId)
       .collection("tasks")
+      .where("userId", "==", userId)
       .get();
 
-    if (courseSnapshot.empty) {
-      courseData = [];
+    if (projectSnapshot.empty) {
+      projectData = [];
     }
 
     if (taskSnapshot.empty) {
       tasksData = [];
     }
 
-    courseData = courseSnapshot.docs.map((course) => {
+    projectData = projectSnapshot.docs.map((project) => {
       return {
-        id: course.id,
-        name: course.data().title,
+        id: project.id,
+        name: project.data().title,
       };
     });
 
@@ -214,10 +211,10 @@ exports.getProfilePage = async (req, res, next) => {
       };
     });
 
-    return res.render("profile.ejs", {
+    return res.render("profile", {
       user: req.session.user,
       isAuth: req.session.user ? true : false,
-      courses: courseData,
+      projects: projectData,
       tasks: tasksData,
     });
   } catch (e) {
@@ -230,33 +227,32 @@ exports.getStudentDetailsPage = async (req, res) => {
   // user id
   const { name, id } = req.params;
 
-  let courseData;
+  let projectData;
   let taskData;
 
   try {
-    const coursesSnapshot = await db
-      .collection("users")
-      .doc(id)
-      .collection("courses")
+    const projectsSnapshot = await db
+      .collection("enrolledProjects")
+      .where("userId", "==", id)
       .get();
 
     const taskSnapshot = await db
-      .collection("users")
-      .doc(id)
       .collection("tasks")
+      .where("userId", "==", id)
       .get();
 
-    if (coursesSnapshot.empty) {
-      courseData = [];
+    if (projectsSnapshot.empty) {
+      projectData = [];
     }
     if (taskSnapshot.empty) {
       taskData = [];
     }
 
-    courseData = coursesSnapshot.docs.map((course) => {
+    projectData = projectsSnapshot.docs.map((project) => {
       return {
-        id: course.id,
-        title: course.data().title,
+        id: project.id,
+        title: project.data().title,
+        userId: project.data().title,
       };
     });
 
@@ -264,15 +260,18 @@ exports.getStudentDetailsPage = async (req, res) => {
       return {
         id: task.id,
         title: task.data().name,
+        userId: task.data().userId,
       };
     });
 
-    res.render("userDetailsPage.ejs", {
+    console.log(taskData);
+
+    res.render("userDetailsPage", {
       studentId: id,
       studentName: name,
       isAuth: req.session.user ? true : false,
       rights: req.session.user.rights,
-      courses: courseData,
+      projects: projectData,
       tasks: taskData,
     });
   } catch (e) {
@@ -304,32 +303,12 @@ exports.getCommentsPage = async (req, res) => {
     };
   });
 
-  res.render("comments-page.ejs", {
+  res.render("comments-page", {
     taskTitle: taskTitle,
     comments: commentsData,
     isAuth: req.session.user ? true : false,
     rights: req.session.user.rights,
   });
-};
-
-exports.getTestPage = (req, res) => {
-  res.render("file_upload.ejs");
-};
-
-exports.uploadFile = (req, res) => {
-  const file = req.body.file;
-
-  const filesRef = ref(storage, "file.jpg");
-  // const fileDataRef = ref(storage, "images/file.jpg");
-  try {
-    uploadBytes(filesRef, file).then((snapshot) => {
-      console.log("uploaded a file" + snapshot);
-    });
-  } catch (e) {
-    console.log(e.message);
-  }
-
-  console.log(file);
 };
 
 exports.logout = (req, res, next) => {
