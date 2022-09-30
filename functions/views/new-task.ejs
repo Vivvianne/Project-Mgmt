@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="../main.css" />
 
     <script src="/upload_file.js" defer></script>
+    <style>
+      .uploading-progress-div {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -16,6 +21,9 @@
 
     <main class="new-project-main">
       <h1>Create a new Task</h1>
+
+      <div class="uploading-progress-div" style="color: green">
+      </div>
 
       <div class="new-program-form">
         <input type="hidden" name="title" value="<%= title %>" id="title" />

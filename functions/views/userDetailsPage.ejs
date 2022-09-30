@@ -80,6 +80,17 @@
         </ul>
         <% } %>
       </section>
+      <% if(rights==='admin') { %>
+        <section class="comments-made">
+          <h2>Comments made</h2>
+          <% if(comments.length <= 0) { %>
+          <p style="color: grey;">Comments made appear here</p>
+          <% } else { %> <% for(let comment of comments) { %>
+          <h4><%= comment.content.comment %></h4>
+          <p><i>made by <%= comment.from %></i></p>
+          <% } %> <% } %>
+        </section>
+        <% } %>
     </main>
 
     <script src="/comments.js"></script>

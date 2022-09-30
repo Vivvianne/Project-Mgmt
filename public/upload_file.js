@@ -1,6 +1,7 @@
 var files = [];
 
 var title = document.getElementById("title").value;
+var progessDiv = document.getElementsByClassName("uploading-progress-div");
 
 document.getElementById("files").addEventListener("change", (e) => {
   console.log(e.target.files);
@@ -23,16 +24,22 @@ document.getElementById("send").addEventListener("click", () => {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      response.json();
+    })
     .then((data) => {
       console.log(data.path);
     })
+    .then(() => {})
     .catch((err) => {
       console.error(err);
     });
-});
 
-// function newProgram(title) {
-//   console.log(title);
-//   /
-// }
+  var message = document.createElement("p");
+  message.innerText = "Page will reload after 10 seconds!";
+  progessDiv[0].appendChild(message);
+  progessDiv[0].style.display = "block";
+  setTimeout(() => {
+    window.location.replace(`/projects/${title}`);
+  }, 10000);
+});

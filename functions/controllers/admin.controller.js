@@ -92,19 +92,22 @@ exports.createTask = async (req, res, next) => {
   try {
     // upload via blob or file
     await uploadBytes(storageRef, file.data, metadata);
+    console.log(`uploaded ${file.name} to storage`);
     // get the download url for the video
-    const url = await getDownloadURL(ref(storage, file.name));
+    getDownloadURL(ref(storage, file.name)).then((url) => {
+      db.collection("tasks")
+        .add({
+          projectId: projectTitle.toLowerCase(),
+          name: name,
+          description: desc,
+          author: author,
+          videoUrl: url,
+        })
+        .then(() => {
+          console.log("task added to firestore");
+        });
 
-
-    await db.collection("tasks").add({
-      projectId: projectTitle.toLowerCase(),
-      name: name,
-      description: desc,
-      author: author,
-      videoUrl: url,
     });
-
-    res.redirect(`/projects/${projectTitle}`);
   } catch (e) {
     console.log(e.message);
   }
@@ -235,11 +238,17 @@ exports.assignTasks = async (req, res) => {
 
 exports.addComment = async (req, res) => {
   const { id, taskId } = req.params;
-  const commentContent = req.body.comment;
+  const commentContent = req.body;
 
   let comment = {
     content: commentContent,
     user: req.session.user.name,
+  };
+
+  let commentByAdmin = {
+    content: commentContent,
+    to: id,
+    from: req.session.user.name,
   };
 
   try {
@@ -251,8 +260,11 @@ exports.addComment = async (req, res) => {
       .collection("comments")
       .add(comment);
 
+    await db.collection("comments").add(commentByAdmin);
+
     res.redirect(`/students`);
   } catch (e) {
     console.log(e.message);
   }
 };
+

@@ -229,6 +229,7 @@ exports.getStudentDetailsPage = async (req, res) => {
 
   let projectData;
   let taskData;
+  let commentsData;
 
   try {
     const projectsSnapshot = await db
@@ -241,12 +242,28 @@ exports.getStudentDetailsPage = async (req, res) => {
       .where("userId", "==", id)
       .get();
 
+    const commentsSnapshot = await db
+      .collection("comments")
+      .where("to", "==", id)
+      .get();
+
+    if (commentsSnapshot.empty) {
+      commentsData = [];
+    }
+
     if (projectsSnapshot.empty) {
       projectData = [];
     }
     if (taskSnapshot.empty) {
       taskData = [];
     }
+
+    commentsData = commentsSnapshot.docs.map((comment) => {
+      return {
+        content: comment.data().content,
+        from: comment.data().from,
+      };
+    });
 
     projectData = projectsSnapshot.docs.map((project) => {
       return {
@@ -264,8 +281,6 @@ exports.getStudentDetailsPage = async (req, res) => {
       };
     });
 
-    console.log(taskData);
-
     res.render("userDetailsPage", {
       studentId: id,
       studentName: name,
@@ -273,6 +288,7 @@ exports.getStudentDetailsPage = async (req, res) => {
       rights: req.session.user.rights,
       projects: projectData,
       tasks: taskData,
+      comments: commentsData,
     });
   } catch (e) {
     console.log(e.message);
