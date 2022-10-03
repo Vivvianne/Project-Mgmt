@@ -45,6 +45,16 @@ select:focus {
   outline: none;
 }
 
+.add-program-div {
+  background-color: rgb(235, 235, 235);
+  width: 60%;
+  margin: 2rem auto;
+  padding: 3rem;
+  color: grey;
+  text-align: center;
+  font-size: 30px;
+}
+
 .login-main,
 .signup-main {
   width: 50%;
@@ -354,19 +364,30 @@ select:focus {
 }
 .student-profile {
   margin: 2rem 0;
-  width: 60%;
-  margin: 5rem auto 3rem auto;
 }
 .student-profile h1 {
   font-size: 30px;
 }
+
 .enrolled-courses,
 .assigned-tasks {
   border: 1px solid rgb(240, 240, 240);
   border-radius: 5px;
   padding: 0 1rem;
-  width: 60%;
-  margin: 1rem auto 3rem auto;
+  /* width: 100%; */
+}
+
+.wrapper-div {
+  width: 80%;
+  padding: 0 3rem;
+}
+
+.comments-made {
+  border-radius: 5px;
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid grey;
+  width: 30%;
 }
 
 hr {
