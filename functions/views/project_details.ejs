@@ -28,15 +28,15 @@
           New Task
         </a>
 
-        <% if (rights=='student') {%>
-        <form action="/students/enroll/<%= title %>" method="post">
+        <% if (rights !='admin') {%>
+        <form action="/user/enroll/<%= title %>" method="post">
           <button type="submit" class="enroll-btn">Enroll</button>
         </form>
         <% } %>
       </div>
 
       <div class="div-programs">
-        <% if(data.length <= 0) { if(rights=='admin') { %>
+        <% if(data.length <= 0) { if(rights === 'admin') { %>
         <div class="add-program-div">
           <!-- <i class="fa fa-plus"></i> -->
           <p>Add tasks from top right corner</p>
@@ -61,7 +61,7 @@
               height="260"
               src="<%= data[i].videoUrl %>"
             ></iframe>
-            <% if(rights == 'admin') { %>
+            <% if(rights === 'admin') { %>
             <form action="/admin/delete/<%= data[i].id %>" method="post">
               <button type="submit">
                 <i class="fa fa-trash delete-btn"></i>
@@ -73,15 +73,28 @@
 
         <% } %>
         <!-- display the modal button to assign project-->
-        <% if(rights == 'admin') { %>
+        <% if(rights != 'student') { %>
         <button id="myBtn" class="assign-tasks-btn">Assign Project</button>
         <% } %>
+
+        <div class="enrolled-users" style="margin-top: 5rem">
+          <h2 >Enrolled Users</h2>
+          <% if(enrolledUsers.length <= 0) { %>
+          <p style="color: grey">Enrolled users appear here</p>
+          <% } else { %>
+          <h2>Users enrolled to this Project</h2>
+          <ol>
+            <% for(let user of enrolledUsers) { %>
+            <li style="color: grey"><%= user.name %> - <i><%= user.rights %></i></li>
+            <% } } %>
+          </ol>
+        </div>
 
         <div id="myModal" class="assign-task-modal">
           <div class="modal-content">
             <span class="close">&times;</span>
 
-            <form action="/admin/assign-task" method="post">
+            <form action="/admin/assign-task/<%= title %>" method="post">
               <div class="select-fields-div">
                 <h2>Assign Project</h2>
                 <label for="project">Choose Project:</label>
@@ -96,7 +109,7 @@
                 <select name="userId" id="userId" class="select-option">
                   <% for(var i=0; i < userData.length; i++) { %>
                   <option value="<%= userData[i].id %>">
-                    <%= userData[i].name %>
+                    <%= userData[i].name %> - <em><%= userData[i].rights %></em>
                   </option>
                   <% } %>
                 </select>

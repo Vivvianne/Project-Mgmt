@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Task</title>
-    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" href="/main.css" />
 
-    <script src="/upload_file.js" defer></script>
     <style>
       .uploading-progress-div {
         display: none;
@@ -22,8 +21,7 @@
     <main class="new-project-main">
       <h1>Create a new Task</h1>
 
-      <div class="uploading-progress-div" style="color: green">
-      </div>
+      <div class="uploading-progress-div" style="color: green"></div>
 
       <div class="new-program-form">
         <input type="hidden" name="title" value="<%= title %>" id="title" />
@@ -36,5 +34,7 @@
         <button id="send">Save</button>
       </div>
     </main>
+
+    <script src="/upload_file.js"></script>
   </body>
 </html>

@@ -40,7 +40,7 @@ router.get(
 );
 
 router.get(
-  "/students/:name/:id",
+  "/user/:name/:id",
   isAuthenticated,
   landingPageController.getStudentDetailsPage
 );

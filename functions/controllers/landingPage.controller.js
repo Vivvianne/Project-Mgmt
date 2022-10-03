@@ -25,25 +25,50 @@ exports.getLandingPage = async (req, res, next) => {
   }
 };
 
-const { getStorage, ref } = require("firebase/storage");
-const storage = getStorage();
-
 exports.getProjectDetailsPage = async (req, res, next) => {
   const projectId = req.params.id;
-  let data;
+  let taskData;
   let userData;
+  let enrolledUsers;
 
   try {
+    const enrolledUserSnapshot = await db
+      .collection("enrolledProjects")
+      .where("title", "==", projectId)
+      .get();
+
     const snapshot = await db
       .collection("tasks")
       .where("projectId", "==", projectId)
       .get();
 
+    // fetch all users
+    const usersSnapshot = await db
+      .collection("users")
+      .where("rights", "!=", "admin")
+      .get();
+
+    if (enrolledUserSnapshot.empty) {
+      enrolledUsers = [];
+    }
+
     if (snapshot.empty) {
       data = [];
     }
 
-    data = snapshot.docs.map((task) => {
+    if (usersSnapshot.empty) {
+      userData = [];
+    }
+
+    enrolledUsers = enrolledUserSnapshot.docs.map((enrUser) => {
+      return {
+        name: enrUser.data().user.name,
+        rights: enrUser.data().user.rights,
+      };
+    });
+    console.log(`enrolled users are ${enrolledUsers}`);
+
+    taskData = snapshot.docs.map((task) => {
       return {
         id: task.id,
         name: task.data().name,
@@ -53,21 +78,12 @@ exports.getProjectDetailsPage = async (req, res, next) => {
       };
     });
 
-    // fetch all users
-    const usersSnapshot = await db
-      .collection("users")
-      .where("rights", "!=", "admin")
-      .get();
-
-    if (usersSnapshot.empty) {
-      userData = [];
-    }
-
     userData = usersSnapshot.docs.map((user) => {
       return {
         id: user.id,
         name: user.data().name,
         email: user.data().email,
+        rights: user.data().rights,
       };
     });
 
@@ -75,8 +91,9 @@ exports.getProjectDetailsPage = async (req, res, next) => {
       title: projectId,
       isAuth: req.session.user ? true : false,
       rights: req.session.user.rights,
-      data: data,
+      data: taskData,
       userData: userData,
+      enrolledUsers: enrolledUsers,
     });
   } catch (e) {
     console.log(e.message);
@@ -155,6 +172,7 @@ exports.getTeamleadsPage = async (req, res, next) => {
 
     data = snapshot.docs.map((lead) => {
       return {
+        id: lead.id,
         name: lead.data().name,
         email: lead.data().email,
         status: lead.data().status,
@@ -208,6 +226,7 @@ exports.getProfilePage = async (req, res, next) => {
       return {
         id: task.id,
         name: task.data().name,
+        projectTitle: task.data().project,
       };
     });
 

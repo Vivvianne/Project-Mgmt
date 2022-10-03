@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Team Leads</title>
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="/main.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -33,7 +33,6 @@
 
       <% if(data.length <= 0) { %> <% if(rights=='admin') { %>
       <div class="add-program-div">
-        <i class="fa fa-plus"></i>
         <p>Add a Team Lead from top right corner</p>
       </div>
 
@@ -46,10 +45,10 @@
       <div class="students-div">
         <% for(var i=0; i < data.length; i++) { %>
         <div class="student">
-          <h3><%= data[i].name %></h3>
-          
+          <a href="/user/<%= data[i].name %>/<%= data[i].id %>">
+            <h3><%= data[i].name %></h3>
+          </a>
           <p><%= data[i].email %></p>
-          
           <p>
             <span class="circle-icon">
               <% if(data[i].status == 'active') { %>

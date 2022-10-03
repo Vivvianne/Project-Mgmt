@@ -24,7 +24,6 @@ exports.createUser = async (req, res, next) => {
       await createUserWithEmailAndPassword(auth, email, password);
       let user = auth.currentUser;
       await updateProfile(user, { displayName: name });
-      console.log(user);
 
       let newUser = {
         name: name,
@@ -34,6 +33,7 @@ exports.createUser = async (req, res, next) => {
       };
 
       await db.collection("users").doc(user.uid).set(newUser);
+      // redirect to student or teamlead accordingly
       if (rights === "student") {
         return res.redirect("/students");
       } else if (rights === "teamlead") {
@@ -47,8 +47,8 @@ exports.createUser = async (req, res, next) => {
   }
 };
 
-// create topic
-exports.createTopic = async (req, res, next) => {
+// create project
+exports.createProject = async (req, res, next) => {
   const { title, desc } = req.body;
 
   try {
@@ -106,7 +106,6 @@ exports.createTask = async (req, res, next) => {
         .then(() => {
           console.log("task added to firestore");
         });
-
     });
   } catch (e) {
     console.log(e.message);
@@ -216,11 +215,14 @@ exports.changeStudentStatus = async (req, res, next) => {
 
 // assign tasks to students and team leads
 exports.assignTasks = async (req, res) => {
+  const projectId = req.params.projectId;
+
   const { taskName, userId } = req.body;
 
   let task = {
     name: taskName,
     userId: userId,
+    project: projectId,
   };
 
   try {
@@ -267,4 +269,3 @@ exports.addComment = async (req, res) => {
     console.log(e.message);
   }
 };
-

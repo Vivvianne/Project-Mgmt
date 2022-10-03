@@ -4,12 +4,7 @@ const { isAuthenticated, isAdmin } = require("../middleware/auth_guard");
 
 router.post("/new-user", isAuthenticated, isAdmin, adminController.createUser);
 
-router.post(
-  "/new-topic",
-  isAuthenticated,
-  isAdmin,
-  adminController.createTopic
-);
+router.post("/new-project", isAuthenticated, adminController.createProject);
 
 router.post(
   "/:projectTitle/new-task",
@@ -20,44 +15,22 @@ router.post(
 router.put(
   "/edit-student/:id",
   isAuthenticated,
-  isAdmin,
   adminController.changeStudentStatus
 );
 
 router.delete(
   "/delete-user/:userId",
   isAuthenticated,
-  isAdmin,
   adminController.deleteUser
 );
 
 router.post(
   "/delete-project/:title",
   isAuthenticated,
-  isAdmin,
   adminController.deleteProject
 );
 
-router.post(
-  "/delete/:taskId",
-  isAuthenticated,
-  isAdmin,
-  adminController.deleteTask
-);
-
-router.get(
-  "/students",
-  isAuthenticated,
-  isAdmin,
-  adminController.getAllStudents
-);
-
-router.get(
-  "/projects",
-  isAuthenticated,
-  isAdmin,
-  adminController.getAllProjects
-);
+router.post("/delete/:taskId", isAuthenticated, adminController.deleteTask);
 
 router.post(
   "/comment/:id/:taskId",
@@ -65,6 +38,10 @@ router.post(
   adminController.addComment
 );
 
-router.post("/assign-task", isAuthenticated, adminController.assignTasks);
+router.post(
+  "/assign-task/:projectId",
+  isAuthenticated,
+  adminController.assignTasks
+);
 
 module.exports = router;

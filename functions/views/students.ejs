@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Students</title>
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="/main.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -33,7 +33,6 @@
 
       <% if(students.length <= 0) { %> <% if(rights=='admin') { %>
       <div class="add-program-div">
-        <i class="fa fa-plus"></i>
         <p>Add a Student from top right corner</p>
       </div>
       <% } else { %>
@@ -45,7 +44,7 @@
       <div class="students-div">
         <% for(var i=0; i < students.length; i++) { %>
         <div class="student">
-          <a href="/students/<%= students[i].name %>/<%=  students[i].id %>">
+          <a href="/user/<%= students[i].name %>/<%=  students[i].id %>">
             <h3><%= students[i].name %></h3>
           </a>
           <p><%= students[i].email %></p>

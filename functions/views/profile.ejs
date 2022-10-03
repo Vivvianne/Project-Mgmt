@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile</title>
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="/main.css" />
   </head>
   <body>
     <header>
@@ -17,7 +17,7 @@
       <h1><%= user.name %>'s Profile</h1>
       <div class="profile-courses">
         <% if(projects.length <= 0) { %>
-        <p>You are not enrolled to any projects</p>
+        <p style="color: grey">You are not enrolled to any projects</p>
         <p>
           Go to
           <span
@@ -36,16 +36,18 @@
       </div>
 
       <div class="profile-assigned-tasks">
-        <%if(tasks.length <= 0) { %>
-        <p>No tasks have been assigned to you</p>
-        <% } else { %>
         <h2 style="margin-top: 2rem">Assigned Tasks</h2>
+        <%if(tasks.length <= 0) { %>
+        <p style="color: grey">No tasks have been assigned to you</p>
+        <% } else { %>
+
         <ul>
           <% for(let task of tasks) { %>
           <li>
-            <a href=" /comments/<%= task.name %>/<%= task.id %>"
-              ><%= task.name %></a
-            >
+            <a href=" /comments/<%= task.name %>/<%= task.id %>">
+              <%= task.name %>
+            </a>
+            <em> from <strong> <%= task.projectTitle %></strong> project</em>
           </li>
           <% } %>
         </ul>

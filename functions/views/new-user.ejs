@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Student</title>
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="/main.css" />
   </head>
   <body>
     <%- include("./partials/_header", {isAuth: isAuth, rights: rights}) %>
 
-    <main class="new-user-main">
+    <main class="new-user-main" style="padding-bottom: 2rem">
       <h1>Create a New User</h1>
 
       <form action="/admin/new-user" method="post" class="new-user-form">
-        <label for="name">Name: </label>
+        <label for="name">Full Name: </label>
         <input type="text" name="name" id="name" />
         <label for="email">Email: </label>
         <input type="email" name="email" id="email" />
