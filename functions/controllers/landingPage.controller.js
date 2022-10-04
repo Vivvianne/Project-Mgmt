@@ -62,11 +62,11 @@ exports.getProjectDetailsPage = async (req, res, next) => {
 
     enrolledUsers = enrolledUserSnapshot.docs.map((enrUser) => {
       return {
+        id: enrUser.data().user.userId,
         name: enrUser.data().user.name,
         rights: enrUser.data().user.rights,
       };
     });
-    console.log(`enrolled users are ${enrolledUsers}`);
 
     taskData = snapshot.docs.map((task) => {
       return {
@@ -203,7 +203,7 @@ exports.getProfilePage = async (req, res, next) => {
       .get();
 
     const taskSnapshot = await db
-      .collection("tasks")
+      .collection("TasktoUser")
       .where("userId", "==", userId)
       .get();
 
@@ -257,7 +257,7 @@ exports.getStudentDetailsPage = async (req, res) => {
       .get();
 
     const taskSnapshot = await db
-      .collection("tasks")
+      .collection("TasktoUser")
       .where("userId", "==", id)
       .get();
 

@@ -70,6 +70,7 @@ const {
   uploadBytes,
   getDownloadURL,
 } = require("firebase/storage");
+const { user } = require("firebase-functions/v1/auth");
 const storage = getStorage();
 
 // create project
@@ -116,10 +117,51 @@ exports.createTask = async (req, res, next) => {
 // user
 exports.deleteUser = async (req, res, next) => {
   const userId = req.params.userId;
-  const collectionName = req.body.name;
 
   try {
-    await db.collection(collectionName).doc(userId).delete();
+    // delete the user and all records associated with the user
+    await db.collection("users").doc(userId).delete();
+
+    // enrolled projects
+    const enrolledProjectQuery = await db
+      .collection("enrolledProjects")
+      .where("userId", "==", userId);
+    enrolledProjectQuery.get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete();
+      });
+      console.log(`deleted ${snapshot} successfully`);
+    });
+
+    // assigned tasks
+    const assignedTaskQuery = await db
+      .collection("TasktoUser")
+      .where("userId", "==", userId);
+    assignedTaskQuery
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          doc.ref.delete();
+        });
+      })
+      .then(() => {
+        console.log(`deleted record`);
+      });
+
+      // user comments
+    const commentsQuery = await db
+      .collection("comments")
+      .where("to", "==", userId);
+    commentsQuery
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          doc.ref.delete();
+        });
+      })
+      .then(() => {
+        console.log(`deleted record`);
+      });
 
     return res.status(201).json({ msg: "successfully deleted" });
   } catch (e) {
@@ -175,30 +217,6 @@ exports.getAllStudents = async (req, res, next) => {
   }
 };
 
-// projects
-exports.getAllProjects = async (req, res, next) => {
-  let data;
-
-  try {
-    const snapshot = await db.collection("projects").get();
-    if (snapshot.empty) {
-      data = [];
-    }
-
-    data = snapshot.docs.map((project) => {
-      return {
-        title: project.data().title,
-        description: project.data().description,
-        id: project.id,
-      };
-    });
-
-    return res.status(200).json({ data: data });
-  } catch (e) {
-    console.log(e.messaage);
-  }
-};
-
 // make student active/inactive
 exports.changeStudentStatus = async (req, res, next) => {
   const id = req.params.id;
@@ -227,8 +245,6 @@ exports.assignTasks = async (req, res) => {
 
   try {
     // create a tasks collection with name and userId
-    await db.collection("tasks").add(task);
-
     await db.collection("TasktoUser").add(task);
 
     console.log(`Task assigned to user ${userId}`);
