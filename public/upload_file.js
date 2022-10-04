@@ -13,7 +13,7 @@ document.getElementById("send").addEventListener("click", () => {
   let desc = document.getElementById("desc").value;
 
   console.log(title, name, desc);
-  var url = `http://localhost:5000/admin/${title}/new-task`;
+  var url = `http://localhost:8080/admin/${title}/new-task`;
   const formData = new FormData();
 
   formData.append("myFile", files[0]);
