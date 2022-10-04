@@ -60,10 +60,36 @@
 
             <%= students[i].status %>
           </p>
+          <input
+            type="hidden"
+            name="userId"
+            value="<%= students[i].id %>"
+            id="user-id"
+          />
+          <% if(rights==='admin') { %>
+          <i class="fa fa-trash" id="delete-btn"></i>
+          <% } %>
         </div>
         <% } %>
       </div>
       <% } %>
     </main>
+
+    <script>
+      var userId = document.getElementById("user-id").value;
+      var url = `http://localhost:5000/admin/delete-user/${userId}`;
+
+      document
+        .getElementById("delete-btn")
+        .addEventListener("click", function () {
+          fetch(url, {
+            method: "POST",
+          })
+            .then((res) => res.json())
+            .then(() => {
+              window.location.reload();
+            });
+        });
+    </script>
   </body>
 </html>
