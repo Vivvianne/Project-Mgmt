@@ -18,7 +18,7 @@ router.put(
   adminController.changeStudentStatus
 );
 
-router.delete(
+router.post(
   "/delete-user/:userId",
   isAuthenticated,
   adminController.deleteUser
