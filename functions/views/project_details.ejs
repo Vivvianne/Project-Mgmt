@@ -56,12 +56,13 @@
           </button>
           <div class="panel">
             <p><%= data[i].desc %></p>
+            <% if(data[i].videoUrl !== '') { %>
             <iframe
               width="450"
               height="260"
               src="<%= data[i].videoUrl %>"
             ></iframe>
-            <% if(rights === 'admin') { %>
+            <% } %> <% if(rights === 'admin') { %>
             <form action="/admin/delete/<%= data[i].id %>" method="post">
               <button type="submit">
                 <i class="fa fa-trash delete-btn"></i>

@@ -11,6 +11,9 @@
       .uploading-progress-div {
         display: none;
       }
+      #files {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -29,9 +32,14 @@
         <input type="text" name="name" id="name" />
         <label for="desc">Task Description: </label>
         <input type="text" name="desc" id="desc" />
-        <input type="file" ref="files" name="files" id="files" />
+        <label for="files" class="files-label"
+          >Choose file <span style="color: grey">(optional)</span></label
+        >
+        <p id="file-name"></p>
 
-        <button id="send">Save</button>
+        <input type="file" ref="files" name="files" id="files" />
+        <br />
+        <button id="send" style="margin-top: 2rem">Save</button>
       </div>
     </main>
 

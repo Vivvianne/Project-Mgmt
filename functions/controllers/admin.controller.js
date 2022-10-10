@@ -79,35 +79,38 @@ exports.createTask = async (req, res, next) => {
 
   let author = req.session.user.name;
   const { name, desc } = req.body;
-  // data from the formData
-  const file = req.files.myFile;
-
-  // setup the storage reference for the file
-  var storageRef = ref(storage, file.name);
-
-  // set custom content type of file
-  const metadata = {
-    contentType: "video/mp4",
-  };
 
   try {
-    // upload via blob or file
-    await uploadBytes(storageRef, file.data, metadata);
-    console.log(`uploaded ${file.name} to storage`);
-    // get the download url for the video
-    getDownloadURL(ref(storage, file.name)).then((url) => {
-      db.collection("tasks")
-        .add({
-          projectId: projectTitle.toLowerCase(),
-          name: name,
-          description: desc,
-          author: author,
-          videoUrl: url,
-        })
-        .then(() => {
-          console.log("task added to firestore");
-        });
+    if (req.files !== null) {
+      // data from the formData
+      const file = req.files.myFile;
+
+      // setup the storage reference for the file
+      var storageRef = ref(storage, file.name);
+
+      // set custom content type of file
+      const metadata = {
+        contentType: "video/mp4",
+      };
+
+      // upload via blob or file
+      await uploadBytes(storageRef, file.data, metadata);
+      console.log(`uploaded ${file.name} to storage`);
+      // get the download url for the video
+      url = await getDownloadURL(ref(storage, file.name));
+    } else {
+      url = "";
+    }
+
+    db.collection("tasks").add({
+      projectId: projectTitle.toLowerCase(),
+      name: name,
+      description: desc,
+      author: author,
+      videoUrl: url,
     });
+
+    console.log("task added to firestore");
   } catch (e) {
     console.log(e.message);
   }
@@ -148,7 +151,7 @@ exports.deleteUser = async (req, res, next) => {
         console.log(`deleted record`);
       });
 
-      // user comments
+    // user comments
     const commentsQuery = await db
       .collection("comments")
       .where("to", "==", userId);
