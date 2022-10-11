@@ -94,7 +94,7 @@ exports.createTask = async (req, res, next) => {
       };
 
       // upload via blob or file
-      await uploadBytes(storageRef, file.data, metadata);
+      await uploadBytes(storageRef, file.data);
       console.log(`uploaded ${file.name} to storage`);
       // get the download url for the video
       url = await getDownloadURL(ref(storage, file.name));
@@ -195,31 +195,6 @@ exports.deleteTask = async (req, res) => {
   }
 };
 
-// view all students + team leads
-// students
-exports.getAllStudents = async (req, res, next) => {
-  let data;
-
-  try {
-    const snapshot = await db.collection("students").get();
-    if (snapshot.empty) {
-      data = [];
-    }
-
-    data = snapshot.docs.map((student) => {
-      return {
-        name: student.data().name,
-        email: student.data().email,
-        status: student.data().status,
-      };
-    });
-
-    return res.status(200).json({ data: data });
-  } catch (e) {
-    console.log(e.message);
-  }
-};
-
 // make student active/inactive
 exports.changeStudentStatus = async (req, res, next) => {
   const id = req.params.id;
@@ -238,11 +213,12 @@ exports.changeStudentStatus = async (req, res, next) => {
 exports.assignTasks = async (req, res) => {
   const projectId = req.params.projectId;
 
-  const { taskName, userId } = req.body;
+  const { taskName, userId, username } = req.body;
 
   let task = {
     name: taskName,
     userId: userId,
+    username: username,
     project: projectId,
   };
 
@@ -250,7 +226,6 @@ exports.assignTasks = async (req, res) => {
     // create a tasks collection with name and userId
     await db.collection("TasktoUser").add(task);
 
-    console.log(`Task assigned to user ${userId}`);
     res.redirect("/");
   } catch (err) {
     console.log(err.message);
@@ -259,15 +234,17 @@ exports.assignTasks = async (req, res) => {
 
 exports.addComment = async (req, res) => {
   const { id, taskId } = req.params;
-  const commentContent = req.body;
+  const { comment, taskName } = req.body;
 
-  let comment = {
-    content: commentContent,
+  let commentData = {
+    content: comment,
     user: req.session.user.name,
+    task: taskName,
   };
 
   let commentByAdmin = {
-    content: commentContent,
+    content: comment,
+    task: taskName,
     to: id,
     from: req.session.user.name,
   };
@@ -279,7 +256,7 @@ exports.addComment = async (req, res) => {
       .collection("tasks")
       .doc(taskId)
       .collection("comments")
-      .add(comment);
+      .add(commentData);
 
     await db.collection("comments").add(commentByAdmin);
 

@@ -28,7 +28,7 @@
           New Task
         </a>
 
-        <% if (rights!='admin') {%>
+        <% if (rights != 'admin') {%>
         <form action="/user/enroll/<%= title %>" method="post">
           <button type="submit" class="enroll-btn">Enroll</button>
         </form>
@@ -46,7 +46,7 @@
         <div class="nothing-div">
           <p>no Tasks yet</p>
         </div>
-        <%} } else { %> <% for(var i=0; i < data.length; i++) { %>
+        <%} } else { %> <% for(var i = 0; i < data.length; i++) { %>
         <div class="accordion-div">
           <button class="accordion">
             <%= data[i].name %> <% if(data[i].author != 'admin') { %> -
@@ -56,13 +56,29 @@
           </button>
           <div class="panel">
             <p><%= data[i].desc %></p>
-            <% if(data[i].videoUrl !== '') { %>
+            <% if(data[i].videoUrl !== '') {
+            if(data[i].videoUrl.includes('.mp4')) { %>
+
             <iframe
               width="450"
               height="260"
               src="<%= data[i].videoUrl %>"
             ></iframe>
-            <% } %> <% if(rights === 'admin') { %>
+            <% } else if (data[i].videoUrl.includes('.jpg') ||
+            data[i].videoUrl.includes('.png') ||
+            data[i].videoUrl.includes('.jpeg')){ %>
+            <img
+              width="400px"
+              height="200px"
+              src="<%= data[i].videoUrl %>"
+              alt="task image"
+            />
+            <% } else if(data[i].videoUrl.includes('.pdf')) { %>
+            <p>
+              View the task details from the
+              <a href="<%= data[i].videoUrl %>">pdf</a>
+            </p>
+            <% } } %> <% if(rights === 'admin') { %>
             <form action="/admin/delete/<%= data[i].id %>" method="post">
               <button type="submit">
                 <i class="fa fa-trash delete-btn"></i>
@@ -102,7 +118,7 @@
                 <h2>Assign Task</h2>
                 <label for="project">Choose Task:</label>
                 <select name="taskName" id="taskName" class="select-option">
-                  <% for(var i=0; i < data.length; i++) { %>
+                  <% for(var i = 0; i < data.length; i++) { %>
                   <option value="<%= data[i].name %>">
                     <%= data[i].name %>
                   </option>
@@ -110,11 +126,17 @@
                 </select>
                 <label for="user">Select User:</label>
                 <select name="userId" id="userId" class="select-option">
-                  <% for(var i=0; i < enrolledUsers.length; i++) { %>
+                  <% for(var i = 0; i < enrolledUsers.length; i++) { %>
                   <option value="<%= enrolledUsers[i].id %>">
                     <%= enrolledUsers[i].name %> -
                     <em><%= enrolledUsers[i].rights %></em>
                   </option>
+                  <input
+                    type="hidden"
+                    name="username"
+                    id="username"
+                    value="<% enrolledUsers[i].name %>"
+                  />
                   <% } %>
                 </select>
 

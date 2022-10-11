@@ -281,6 +281,7 @@ exports.getStudentDetailsPage = async (req, res) => {
       return {
         content: comment.data().content,
         from: comment.data().from,
+        taskName: comment.data().task
       };
     });
 

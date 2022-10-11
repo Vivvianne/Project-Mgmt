@@ -48,11 +48,26 @@
               <%= task.name %>
             </a>
             <em> from <strong> <%= task.projectTitle %></strong> project</em>
+            <input
+              type="hidden"
+              name="projectId"
+              id="projectId"
+              value="<%= task.projectTitle %>"
+            />
+            <input
+              type="hidden"
+              name="taskName"
+              id="taskName"
+              value="<%= task.name %>"
+            />
+            <button class="done-btn" id="done-btn">Done</button>
           </li>
           <% } %>
         </ul>
         <% } %>
       </div>
     </main>
+
+    <script src="/mark_done.js"></script>
   </body>
 </html>

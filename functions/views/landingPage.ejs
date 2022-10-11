@@ -47,6 +47,7 @@
           <a href="/projects/<%= item.id %>">
             <h3 class="card-title"><%= item.title %></h3>
             <p class="card-desc"><%= item.description %></p>
+            <input type="hidden" name="projectId" id="projectId" />
             <% if(rights=='admin') { %>
             <form action="/admin/delete-project/<%= item.id %>" method="post">
               <button name="delete" class="delete-btn">Delete Project</button>
@@ -60,5 +61,6 @@
 
       <% } %>
     </main>
+    <script src="/get_tasks.js"></script>
   </body>
 </html>

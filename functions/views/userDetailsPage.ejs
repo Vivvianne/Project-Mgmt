@@ -74,13 +74,17 @@
                 >
                   <textarea
                     name="comment"
-                    id=""
                     cols="50"
                     rows="10"
                     placeholder="Leave a comment for <%= studentName %>"
                     style="resize: none"
                   >
                   </textarea>
+                  <input
+                    type="hidden"
+                    name="taskName"
+                    value="<%= task.title %>"
+                  />
                   <div class="select-fields-div">
                     <button type="submit" style="float: left">Comment</button>
                   </div>
@@ -98,12 +102,18 @@
         <h2>Comments made</h2>
         <hr />
         <% if(comments.length <= 0) { %>
-        <p style="color: grey">Comments made appear here</p>
+        <div class="no-comment-card">
+          <p style="color: grey">Comments made appear here</p>
+        </div>
         <% } else { %> <% for(let comment of comments) { %>
-        <h4 style="margin: 10px 0 0 0"><%= comment.content.comment %></h4>
-        <p style="text-decoration: underline; float: right; color: grey">
-          <i>-- <%= comment.from %> --</i>
-        </p>
+        <div class="comment-card">
+          <h5 style="color: grey;"><%= comment.taskName %></h5>
+          <h4><%= comment.content %></h4>
+          <p>
+            <i>by <%= comment.from %> </i>
+          </p>
+        </div>
+
         <% } %> <% } %>
       </section>
       <% } %>

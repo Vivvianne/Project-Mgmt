@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const adminController = require("../controllers/admin.controller");
-const { isAuthenticated, isAdmin } = require("../middleware/auth_guard");
+const { isAuthenticated } = require("../middleware/auth_guard");
 
-router.post("/new-user", isAuthenticated, isAdmin, adminController.createUser);
+router.post("/new-user", isAuthenticated, adminController.createUser);
 
 router.post("/new-project", isAuthenticated, adminController.createProject);
 
