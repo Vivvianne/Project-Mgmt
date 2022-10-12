@@ -55,6 +55,27 @@ select:focus {
   font-size: 30px;
 }
 
+.files-label {
+  background-color: rgb(202, 202, 202);
+  color: white;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.comment-card {
+  border: 1px solid grey;
+  border-radius: 10px;
+  padding: 0 15px;
+  margin: 10px 0;
+}
+
+.comment-card p {
+  color: grey;
+  text-align: end;
+}
+
 .login-main,
 .signup-main {
   width: 50%;
@@ -454,13 +475,17 @@ hr {
 }
 
 .comment-item {
-  width: 25%;
   list-style: none;
-  padding: 3rem;
-  background-color: rgb(223, 223, 223);
-  border-radius: 25%;
+  margin-bottom: 1rem;
+  border: 1px solid rgb(170, 192, 255);
+  border-radius: 5px;
+  max-width: 300px;
+  padding: 1rem;
 }
 
 .comment-item i {
-  float: right;
+  display: block;
+  color: grey;
+  text-align: end;
+  margin-top: 10px;
 }
