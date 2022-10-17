@@ -4,8 +4,8 @@ A Nodejs application leveraging the Backend capabilities of Firebase
 By Vivvianne Kimani.
 
 ## Description
-A web based system for students and supervisors. It allows students to view projects and enroll to them as desired
-It also allows admin user to add, delete and assign projects to both students and team leaders. The admin can also add tasks and comment on tasks.
+A web based system for students and supervisors. It allows students and team leads to view projects and enroll to them as desired
+It also allows admin user to add, delete and assign projects to both students and team leaders. The admin and team lead can also add tasks and comment on tasks.
 I have leveraged the diverse capabilities of Firebase Technology to add authentication and also used the firestore
 to store user data
 
